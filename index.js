@@ -17,6 +17,7 @@ const sslOptions = {
 };
 
 const server = https.createServer(sslOptions,app);
+
 //App Init
 app.use(cors());
 app.use(express.json());
@@ -24,6 +25,7 @@ app.use('/', Routes);
 
 setInterval(Markers_Controller.delete_Markers, 4 * 60 * 60 * 1000);
 
+//Server Port
 server.listen(4000, () => {
   console.log(`Server is running on port 4000`);
 });

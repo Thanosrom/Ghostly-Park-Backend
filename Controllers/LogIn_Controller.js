@@ -1,0 +1,87 @@
+const express = require('express');
+//Routes
+const router = express.Router();
+//Models
+const LogIn_Model = require('../Models/LogIn_Model');
+//Libs
+const bcrypt = require('bcrypt');
+const { OAuth2Client } = require('google-auth-library');
+//Tokens
+const jwt = require('jsonwebtoken');
+//const SECRET_KEY = 'ghostly_park_secret_key';
+//Keys
+//For Google Auth
+// const CLIENT_ID = '860340204881-bsfs4uiplrbffk1sefhgs01ubrlpka1a.apps.googleusercontent.com';
+// const client = new OAuth2Client(CLIENT_ID);
+//For Apple Auth
+// const clientId = 'YOUR_APPLE_CLIENT_ID';
+// const teamId = 'YOUR_TEAM_ID';
+// const keyId = 'YOUR_KEY_ID';
+// const privateKeyPath = 'path/to/your/private-key.p8';
+// const auth = new appleAuth.Auth(clientId, teamId, keyId, privateKeyPath, 'text');
+
+const logIn_Controller = {
+
+    async login (req, res) {
+
+        const { email, password } = req.body;
+        
+            const results = await LogIn_Model.login_Model(email);
+            if (results.length === 0) {
+                res.sendStatus(401);
+            } else {
+                const hash = results[0].password;
+                const isPasswordCorrect = await bcrypt.compare(password, hash);
+                if (isPasswordCorrect) {
+                    const payload = { id: results[0].id };
+                    const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '2h'});
+                    const response = {
+                        status: 200,
+                        token: token,
+                        userId: results[0].id, 
+                        email : results[0].email,
+                        username : results[0].username,
+                        carInfo : results[0].carInfo,
+                        coins : results[0].coins,
+                        gems : results[0].gems,
+                    };
+                    res.status(200).json(response);
+                } else {
+                    res.sendStatus(401);
+                }
+            }
+       
+    },
+
+    // async verify(token) {
+    //     const ticket = await client.verifyIdToken({
+    //       idToken: token,
+    //       audience: CLIENT_ID,
+    //     });
+    //     const payload = ticket.getPayload();
+    //     return payload;
+    // },
+
+    //Google Auth
+    // async auth_google(req, res) {
+    //     try {
+    //         const token = req.body.idToken;
+    //         const payload = await logIn_Controller.verify(token);
+    //         res.status(200).json(payload);
+    //       } catch (error) {
+    //         res.status(401).json({ error: 'Invalid token' });
+    //       }
+    // },
+      
+    // async auth_apple(req, res) {
+    //     try {
+    //         const token = req.body.token;
+    //         const decodedToken = await auth.verifyIdToken(token);
+    //         res.status(200).send(decodedToken);
+    //       } catch (error) {
+    //         res.status(500).send('Error verifying Apple sign in');
+    //       }
+    // }
+};
+
+module.exports = logIn_Controller;

@@ -8,9 +8,6 @@ const bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator');
 //Shared digit code variables
 const sharedVariables = require('./sharedVariables');
-//Extra validators files
-// const { containsBadWords } = require('./BadWords');
-// const { containsCarNames } = require('./CarWords');
 
 const saltRounds = 10;
 
@@ -19,9 +16,18 @@ const Settings_Controller = {
     async change_Username (req, res) {
       const { newUsername } = req.body;
       try{
-        // if (containsBadWords(newUsername)) {
-        //   return res.sendStatus(400);
-        // }
+        //Username
+        const validateUsername = [
+          body('newUsername')
+          .isLength({ min: 2,max: 25})
+          .matches(/^[A-Za-z][A-Za-z0-9]{2,25}$/)
+        ];
+        await Promise.all(validateUsername.map(validation => validation.run(req)));
+        const usernameErrors = validationResult(req);
+        if (!usernameErrors.isEmpty()) {
+          return res.sendStatus(400);
+        }
+
         if (newUsername !== undefined && req.user.id !== undefined) {
           const results = await Settings_Model.change_Username(newUsername,req.user.id);
           if (results) {
@@ -59,10 +65,9 @@ const Settings_Controller = {
       try{
         const validatePassword = [
           body('newPassword')
-            .isLength({ min: 8,max: 15 })
-            .matches(/[a-zA-Z]/)
-            .matches(/\d/) 
-            .matches(/^[a-zA-Z0-9!@#$%^&*()-_=+,.?"]*$/)
+              .isLength({ min: 8,max: 25})
+              .isStrongPassword
+              .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/)
         ];
         await Promise.all(validatePassword.map(validation => validation.run(req)));
         const errorsPassword = validationResult(req); 
@@ -100,13 +105,11 @@ const Settings_Controller = {
 
     async change_CarInfo (req, res) {
       const { newCarInfo } = req.body;
-      // if (!containsCarNames(newCarInfo)) {
-      //   return res.sendStatus(400);
-      // }
       try{
         const changeCarInfoValidation = [
           body('newCarInfo')
-            .isLength({ min: 3, max: 25 })
+          .matches(/^[A-Za-z0-9\s-]{2,25}$/)
+          .isLength({ min: 2, max: 25 })
         ];
         await Promise.all(changeCarInfoValidation.map(validation => validation.run(req)));
         const carErrors = validationResult(req);

@@ -26,6 +26,30 @@ const logIn_Controller = {
 
         const { email, password } = req.body;
         
+          //Email
+            const validateEmail = [
+                body('email')
+                .isEmail()
+            ];
+            await Promise.all(validateEmail.map(validation => validation.run(req)));
+            const errorsEmail = validationResult(req);
+            if (!errorsEmail.isEmpty()) {
+                return res.sendStatus(400);
+            }
+            //Password
+            const validatePassword = [
+                body('password')
+                .isLength({ min: 8,max: 25})
+                .isStrongPassword
+                .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/)
+            ];
+            await Promise.all(validatePassword.map(validation => validation.run(req)));
+            const errorsPassword = validationResult(req); 
+
+            if (!errorsPassword.isEmpty()) {
+                return res.sendStatus(400);
+            }
+
             const results = await LogIn_Model.login_Model(email);
             if (results.length === 0) {
                 res.sendStatus(401);

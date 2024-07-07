@@ -152,10 +152,9 @@ const Recovery_Password_Controller = {
           //Password
           const validatePassword = [
             body('password')
-              .isLength({ min: 8, max:15})
-              .matches(/[a-zA-Z]/)
-              .matches(/\d/) 
-              .matches(/^[a-zA-Z0-9!@#$%^&*()-_=+,.?"]*$/)
+            .isLength({ min: 8,max: 25})
+            .isStrongPassword
+            .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/)
           ];
           await Promise.all(validatePassword.map(validation => validation.run(req)));
           const errorsPassword = validationResult(req); 
@@ -165,10 +164,9 @@ const Recovery_Password_Controller = {
           }
           const validateRepeatPassword = [
             body('repeatPassword')
-              .isLength({ min: 8 , max:15})
-              .matches(/[a-zA-Z]/)
-              .matches(/\d/) 
-              .matches(/^[a-zA-Z0-9!@#$%^&*()-_=+,.?"]*$/)
+            .isLength({ min: 8,max: 25})
+            .isStrongPassword
+            .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/)
           ];
           await Promise.all(validateRepeatPassword.map(validation => validation.run(req)));
           const errorsRepeatPassword = validationResult(req);

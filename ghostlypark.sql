@@ -35,16 +35,6 @@ CREATE TABLE `parked_slots` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `parked_slots`
---
-
-LOCK TABLES `parked_slots` WRITE;
-/*!40000 ALTER TABLE `parked_slots` DISABLE KEYS */;
-INSERT INTO `parked_slots` VALUES (147,41,23.7021433,38.0081333,1716985638951),(148,45,23.7282367,38.003805,1718117954173);
-/*!40000 ALTER TABLE `parked_slots` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `register`
 --
 
@@ -60,20 +50,9 @@ CREATE TABLE `register` (
   `coins` int DEFAULT NULL,
   `gems` int DEFAULT NULL,
   `subscription` tinyint NOT NULL,
-  `registercol` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `register`
---
-
-LOCK TABLES `register` WRITE;
-/*!40000 ALTER TABLE `register` DISABLE KEYS */;
-INSERT INTO `register` VALUES (46,'Thanos','$2b$10$lZ9EnZDmN8bgprtWncFm4.J/Jcmu5QfnU9r8hLUItL1CLJhxY9qRi','thanosrom95@gmail.com','Corolla',46,89,0,NULL);
-/*!40000 ALTER TABLE `register` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `unparked_slots`
@@ -91,16 +70,6 @@ CREATE TABLE `unparked_slots` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=284 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `unparked_slots`
---
-
-LOCK TABLES `unparked_slots` WRITE;
-/*!40000 ALTER TABLE `unparked_slots` DISABLE KEYS */;
-INSERT INTO `unparked_slots` VALUES (283,46,38.0069083,23.736325,1718963383056);
-/*!40000 ALTER TABLE `unparked_slots` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -111,4 +80,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-21 20:44:08
+-- Dump completed on 2024-07-07 18:19:23

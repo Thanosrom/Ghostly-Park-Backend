@@ -9,6 +9,7 @@ const nodemailer = require('nodemailer');
 const { body, validationResult } = require('express-validator');
 //Shared digit code variables
 const sharedVariables = require('./sharedVariables');
+const { max } = require('moment');
 //Extra validators files
 // const { containsBadWords } = require('./BadWords');
 // const { containsCarNames } = require('./CarWords');
@@ -105,7 +106,7 @@ const Register_Controller = {
       
           transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-	      console.log(error)
+	            console.log(error)
               return res.sendStatus(400);
             } else {   
               return res.sendStatus(200);
@@ -146,22 +147,27 @@ const Register_Controller = {
     async register_Data (req, res) {
         const { username, password, email, digitCode, carInfo } = req.body;
         //Registers
-        //Useraname
-        // if (containsBadWords(username)) {
-        //   return res.sendStatus(400);
-        // }
         try{
+          //Username
+          const validateUsername = [
+            body('username')
+              .isLength({ min: 2,max: 25})
+              .matches(/^[A-Za-z][A-Za-z0-9]{2,25}$/)
+          ];
+          await Promise.all(validateUsername.map(validation => validation.run(req)));
+          const errorsUsername = validationResult(req); 
+          if (!errorsUsername.isEmpty()) {
+            return res.sendStatus(400);
+          }
           //Password
           const validatePassword = [
             body('password')
-              .isLength({ min: 8, max:15})
-              .matches(/[a-zA-Z]/)
-              .matches(/\d/) 
-              .matches(/^[a-zA-Z0-9!@#$%^&*()-_=+,.?"]*$/)
+              .isLength({ min: 8,max: 25})
+              .isStrongPassword
+              .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/)
           ];
           await Promise.all(validatePassword.map(validation => validation.run(req)));
           const errorsPassword = validationResult(req); 
-
           if (!errorsPassword.isEmpty()) {
             return res.sendStatus(400);
           }
@@ -175,13 +181,11 @@ const Register_Controller = {
           if (!errorsEmail.isEmpty()) {
             return res.sendStatus(400);
           }
-        //Car Info
-        //if (!containsCarNames(carInfo)) {
-            //return res.sendStatus(400);
-          //}
+          //Car
           const changeCarInfoValidation = [
             body('carInfo')
-              .isLength({ min: 3, max: 25 })
+              .matches(/^[A-Za-z0-9\s-]{2,25}$/)
+              .isLength({ min: 2, max: 25 })
           ];
           await Promise.all(changeCarInfoValidation.map(validation => validation.run(req)));
           const carErrors = validationResult(req);

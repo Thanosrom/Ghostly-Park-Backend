@@ -112,7 +112,7 @@ const Recovery_Password_Controller = {
           }
 
           const mailOptions = {
-            from: 'no-reply@ghostlypark.com',
+            from: 'info@ghostlypark.com',
             to: email,
             subject: head,
             text: text,
@@ -153,7 +153,6 @@ const Recovery_Password_Controller = {
           const validatePassword = [
             body('password')
             .isLength({ min: 8,max: 25})
-            .isStrongPassword
             .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/)
           ];
           await Promise.all(validatePassword.map(validation => validation.run(req)));
@@ -165,7 +164,6 @@ const Recovery_Password_Controller = {
           const validateRepeatPassword = [
             body('repeatPassword')
             .isLength({ min: 8,max: 25})
-            .isStrongPassword
             .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/)
           ];
           await Promise.all(validateRepeatPassword.map(validation => validation.run(req)));

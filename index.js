@@ -1,7 +1,7 @@
 //Libs
 require('dotenv').config();
 const express = require('express');
-const http = require('http');
+const https = require('https');
 const cors = require('cors');
 const fs = require('fs');
 const app = express();
@@ -16,7 +16,7 @@ const sslOptions = {
   ca: fs.readFileSync('./assets/certs/ghostlypark_com.ca-bundle.pem') // CA bundle
 };
 
-const server = http.createServer(app);
+const server = https.createServer(sslOptions,app);
 
 //App Init
 app.use(cors());

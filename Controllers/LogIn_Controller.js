@@ -26,7 +26,7 @@ const logIn_Controller = {
 
         const { email, password } = req.body;
         
-          //Email
+            //Email
             const validateEmail = [
                 body('email')
                 .isEmail()
@@ -40,7 +40,6 @@ const logIn_Controller = {
             const validatePassword = [
                 body('password')
                 .isLength({ min: 8,max: 25})
-                .isStrongPassword
                 .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/)
             ];
             await Promise.all(validatePassword.map(validation => validation.run(req)));

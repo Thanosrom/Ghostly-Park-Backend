@@ -97,7 +97,7 @@ const Register_Controller = {
           }
 
           const mailOptions = {
-            from: 'no-reply@ghostlypark.com',
+            from: 'info@ghostlypark.com',
             to: email,
             subject: head,
             text: text,
@@ -163,7 +163,6 @@ const Register_Controller = {
           const validatePassword = [
             body('password')
               .isLength({ min: 8,max: 25})
-              .isStrongPassword
               .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/)
           ];
           await Promise.all(validatePassword.map(validation => validation.run(req)));
@@ -213,6 +212,7 @@ const Register_Controller = {
                 return res.sendStatus(400);
             }
       }catch(error){ 
+        console.log(error)
         res.sendStatus(400);
       }
     },

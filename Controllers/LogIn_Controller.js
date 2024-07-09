@@ -6,6 +6,7 @@ const LogIn_Model = require('../Models/LogIn_Model');
 //Libs
 const bcrypt = require('bcrypt');
 const { OAuth2Client } = require('google-auth-library');
+const { body, validationResult } = require('express-validator');
 //Tokens
 const jwt = require('jsonwebtoken');
 //const SECRET_KEY = 'ghostly_park_secret_key';
@@ -25,11 +26,11 @@ const logIn_Controller = {
     async login (req, res) {
 
         const { email, password } = req.body;
-        
+            try{
+            console.log(email)
             //Email
             const validateEmail = [
-                body('email')
-                .isEmail()
+                body('email').isEmail()
             ];
             await Promise.all(validateEmail.map(validation => validation.run(req)));
             const errorsEmail = validationResult(req);
@@ -73,6 +74,9 @@ const logIn_Controller = {
                     res.sendStatus(401);
                 }
             }
+        }catch(error){
+            console.log(error)
+        }
        
     },
 

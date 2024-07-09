@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 
 const Delete_Account_Steps_Controller = {
-    async delete_Account_Steps(req, res) {
-        try {
-            // Serve the HTML content directly
-            const htmlContent = `
+  async delete_Account_Steps(req, res) {
+    try {
+      // Serve the HTML content directly
+      const htmlContent = `
             <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -53,11 +54,11 @@ const Delete_Account_Steps_Controller = {
             </body>
             </html>
             `;
-            res.status(200).send(htmlContent);
-        } catch (error) {
-            res.status(400).json({ message: 'Server is facing issues' });
-        }
+      res.status(200).send(htmlContent);
+    } catch (error) {
+      res.status(400).json({ message: 'Server is facing issues' });
     }
+  },
 };
 
 module.exports = Delete_Account_Steps_Controller;

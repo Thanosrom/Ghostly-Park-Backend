@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 //Libs
 require('dotenv').config();
 const express = require('express');
-const https = require('https');
+const https = require('http');
 const cors = require('cors');
 const fs = require('fs');
 const app = express();
@@ -11,12 +12,12 @@ const Markers_Controller = require('./Controllers/Markers_Controller');
 const Routes = require('./Routes');
 //SSL Options
 const sslOptions = {
-  key: fs.readFileSync('./assets/certs/ghostlypark.pem.key'),         // Private key
-  cert: fs.readFileSync('./assets/certs/ghostlypark.pem'),            // Certificate
-  ca: fs.readFileSync('./assets/certs/ghostlypark_com.ca-bundle.pem') // CA bundle
+  key: fs.readFileSync('./assets/certs/ghostlypark.pem.key'), // Private key
+  cert: fs.readFileSync('./assets/certs/ghostlypark.pem'), // Certificate
+  ca: fs.readFileSync('./assets/certs/ghostlypark_com.ca-bundle.pem'), // CA bundle
 };
 
-const server = https.createServer(sslOptions,app);
+const server = https.createServer(app);
 
 //App Init
 app.use(cors());

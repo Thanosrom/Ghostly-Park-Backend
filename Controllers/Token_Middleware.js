@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const jwt = require('jsonwebtoken');
 
 function authenticateToken(req, res, next) {
@@ -5,7 +6,7 @@ function authenticateToken(req, res, next) {
   if (authHeader == null) return res.sendStatus(401);
 
   const token = authHeader && authHeader.split(' ')[1];
-  if (!token) return res.sendStatus(401); 
+  if (!token) return res.sendStatus(401);
 
   jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
     if (err) return res.sendStatus(403);

@@ -102,7 +102,9 @@ const logIn_Controller = {
   async auth_google(req, res) {
     try {
       const token = req.body.idToken;
+      console.log(token);
       const payload = await logIn_Controller.verify(token);
+      console.log(payload);
       res.status(200).json(payload);
     } catch (error) {
       res.status(401).json({ error: 'Invalid token' });

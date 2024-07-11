@@ -15,7 +15,7 @@ const jwt = require('jsonwebtoken');
 //Keys
 //For Google Auth
 const CLIENT_ID =
-  '860340204881-bsfs4uiplrbffk1sefhgs01ubrlpka1a.apps.googleusercontent.com';
+  '967660914327-3g92fkbkkg81sc1pv6n3pu8b0dfig3dr.apps.googleusercontent.com';
 const client = new OAuth2Client(CLIENT_ID);
 //For Apple Auth
 // const clientId = 'YOUR_APPLE_CLIENT_ID';

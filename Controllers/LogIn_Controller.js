@@ -87,11 +87,11 @@ const logIn_Controller = {
   async verify(token) {
     try {
       console.log(token);
-      console.log(GOOGLE_AUTH_TOKEN);
+      console.log(process.env.GOOGLE_AUTH_TOKEN);
       const client = new JWT(process.env.GOOGLE_AUTH_TOKEN);
       const ticket = await client.verifyIdToken({
         idToken: token,
-        audience: GOOGLE_AUTH_TOKEN,
+        audience: process.env.GOOGLE_AUTH_TOKEN,
       });
       const payload = ticket.getPayload();
       console.log(payload);

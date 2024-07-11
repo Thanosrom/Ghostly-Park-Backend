@@ -14,14 +14,21 @@ const jwt = require('jsonwebtoken');
 //const SECRET_KEY = 'ghostly_park_secret_key';
 //Keys
 //For Google Auth
-// const CLIENT_ID = '860340204881-bsfs4uiplrbffk1sefhgs01ubrlpka1a.apps.googleusercontent.com';
-// const client = new OAuth2Client(CLIENT_ID);
+const CLIENT_ID =
+  '860340204881-bsfs4uiplrbffk1sefhgs01ubrlpka1a.apps.googleusercontent.com';
+const client = new OAuth2Client(CLIENT_ID);
 //For Apple Auth
 // const clientId = 'YOUR_APPLE_CLIENT_ID';
 // const teamId = 'YOUR_TEAM_ID';
 // const keyId = 'YOUR_KEY_ID';
 // const privateKeyPath = 'path/to/your/private-key.p8';
-// const auth = new appleAuth.Auth(clientId, teamId, keyId, privateKeyPath, 'text');
+// const auth = new appleAuth.Auth(
+//   clientId,
+//   teamId,
+//   keyId,
+//   privateKeyPath,
+//   'text'
+// );
 
 const logIn_Controller = {
   async login(req, res) {
@@ -82,25 +89,25 @@ const logIn_Controller = {
     }
   },
 
-  // async verify(token) {
-  //     const ticket = await client.verifyIdToken({
-  //       idToken: token,
-  //       audience: CLIENT_ID,
-  //     });
-  //     const payload = ticket.getPayload();
-  //     return payload;
-  // },
+  async verify(token) {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    return payload;
+  },
 
   //Google Auth
-  // async auth_google(req, res) {
-  //     try {
-  //         const token = req.body.idToken;
-  //         const payload = await logIn_Controller.verify(token);
-  //         res.status(200).json(payload);
-  //       } catch (error) {
-  //         res.status(401).json({ error: 'Invalid token' });
-  //       }
-  // },
+  async auth_google(req, res) {
+    try {
+      const token = req.body.idToken;
+      const payload = await logIn_Controller.verify(token);
+      res.status(200).json(payload);
+    } catch (error) {
+      res.status(401).json({ error: 'Invalid token' });
+    }
+  },
 
   // async auth_apple(req, res) {
   //     try {

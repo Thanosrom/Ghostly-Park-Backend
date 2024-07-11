@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 //Libs
 require('dotenv').config();
 const express = require('express');
-const https = require('http');
+const https = require('https');
 const cors = require('cors');
 const fs = require('fs');
 const app = express();
@@ -17,7 +16,7 @@ const sslOptions = {
   ca: fs.readFileSync('./assets/certs/ghostlypark_com.ca-bundle.pem'), // CA bundle
 };
 
-const server = https.createServer(app);
+const server = https.createServer(sslOptions, app);
 
 //App Init
 app.use(cors());

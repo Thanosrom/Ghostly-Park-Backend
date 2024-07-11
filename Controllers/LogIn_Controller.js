@@ -7,7 +7,7 @@ const router = express.Router();
 const LogIn_Model = require('../Models/LogIn_Model');
 //Libs
 const bcrypt = require('bcrypt');
-const { JWT } = require('google-auth-library');
+const { OAuth2Client } = require('google-auth-library');
 const { body, validationResult } = require('express-validator');
 //Tokens
 const jwt = require('jsonwebtoken');
@@ -86,15 +86,12 @@ const logIn_Controller = {
 
   async verify(token) {
     try {
-      console.log(token);
-      console.log(process.env.GOOGLE_AUTH_TOKEN);
-      const client = new JWT(process.env.GOOGLE_AUTH_TOKEN);
+      const client = new OAuth2Client(process.env.GOOGLE_AUTH_TOKEN);
       const ticket = await client.verifyIdToken({
         idToken: token,
         audience: process.env.GOOGLE_AUTH_TOKEN,
       });
       const payload = ticket.getPayload();
-      console.log(payload);
       return payload;
     } catch (error) {
       console.log(error);

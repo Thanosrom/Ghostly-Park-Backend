@@ -90,12 +90,16 @@ const logIn_Controller = {
   },
 
   async verify(token) {
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: CLIENT_ID,
-    });
-    const payload = ticket.getPayload();
-    return payload;
+    try {
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      return payload;
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   //Google Auth
@@ -107,6 +111,7 @@ const logIn_Controller = {
       console.log(payload);
       res.status(200).json(payload);
     } catch (error) {
+      console.log(error);
       res.status(401).json({ error: 'Invalid token' });
     }
   },

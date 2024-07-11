@@ -11,12 +11,7 @@ const { JWT } = require('google-auth-library');
 const { body, validationResult } = require('express-validator');
 //Tokens
 const jwt = require('jsonwebtoken');
-//const SECRET_KEY = 'ghostly_park_secret_key';
 //Keys
-//For Google Auth
-const CLIENT_ID =
-  '967660914327-3g92fkbkkg81sc1pv6n3pu8b0dfig3dr.apps.googleusercontent.com';
-const client = new JWT(CLIENT_ID);
 //For Apple Auth
 // const clientId = 'YOUR_APPLE_CLIENT_ID';
 // const teamId = 'YOUR_TEAM_ID';
@@ -91,11 +86,15 @@ const logIn_Controller = {
 
   async verify(token) {
     try {
+      console.log(token);
+      console.log(GOOGLE_AUTH_TOKEN);
+      const client = new JWT(process.env.GOOGLE_AUTH_TOKEN);
       const ticket = await client.verifyIdToken({
         idToken: token,
-        audience: CLIENT_ID,
+        audience: GOOGLE_AUTH_TOKEN,
       });
       const payload = ticket.getPayload();
+      console.log(payload);
       return payload;
     } catch (error) {
       console.log(error);

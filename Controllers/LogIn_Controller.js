@@ -7,7 +7,7 @@ const router = express.Router();
 const LogIn_Model = require('../Models/LogIn_Model');
 //Libs
 const bcrypt = require('bcrypt');
-const { OAuth2Client } = require('google-auth-library');
+const { JWT } = require('google-auth-library');
 const { body, validationResult } = require('express-validator');
 //Tokens
 const jwt = require('jsonwebtoken');
@@ -16,7 +16,7 @@ const jwt = require('jsonwebtoken');
 //For Google Auth
 const CLIENT_ID =
   '967660914327-3g92fkbkkg81sc1pv6n3pu8b0dfig3dr.apps.googleusercontent.com';
-const client = new OAuth2Client(CLIENT_ID);
+const client = new JWT(CLIENT_ID);
 //For Apple Auth
 // const clientId = 'YOUR_APPLE_CLIENT_ID';
 // const teamId = 'YOUR_TEAM_ID';

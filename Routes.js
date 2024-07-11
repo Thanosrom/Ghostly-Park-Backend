@@ -88,7 +88,7 @@ router.get(
 
 //Login
 router.post('/login', login_Limiter, LogIn_Controller.login);
-//router.post('/auth_google',auth_google_Limiter,LogIn_Controller.auth_google);
+router.post('/auth_google', auth_google_Limiter, LogIn_Controller.auth_google);
 //router.post('/auth_apple',auth_apple_Limiter,LogIn_Controller.auth_apple);
 
 //Register

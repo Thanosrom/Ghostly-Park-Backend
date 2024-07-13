@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 //Libs
 require('dotenv').config();
 const express = require('express');
@@ -22,7 +23,10 @@ const server = https.createServer(sslOptions, app);
 app.use(cors());
 app.use(express.json());
 app.use('/', Routes);
+// Website
+app.use(express.static(__dirname + '/Website/dist'));
 
+//Delete The Markers after some minutes-hours
 setInterval(Markers_Controller.delete_Markers, 4 * 60 * 60 * 1000);
 
 //Server Port

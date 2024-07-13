@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 const express = require('express');
 
@@ -57,6 +58,7 @@ const {
   minus_Coins_Limiter,
   minus_5_Coins_Limiter,
   minus_Gems_Limiter,
+  Website_Limiter,
 } = require('./Controllers/Route_Limiters');
 
 //Server Status
@@ -232,6 +234,11 @@ router.put(
   minus_Gems_Limiter,
   Update_Coins_Gems_Controller.minus_Gems
 );
+
+//Website
+router.get('/', Website_Limiter, (req, res) => {
+  res.sendFile(__dirname + '/Website/dist/index.html');
+});
 
 //Export
 module.exports = router;

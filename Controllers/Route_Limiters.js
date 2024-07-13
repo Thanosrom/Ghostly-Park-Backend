@@ -266,6 +266,16 @@ const minus_Gems_Limiter = rateLimit({
 });
 
 //-----------------------------------------------------------------------------------------------------//
+//Website_Limiter
+const Website_Limiter = rateLimit({
+  WindowMs: 10 * 1000,
+  max: 10,
+  message:
+    'Too many login attempts from this IP, please try again after some minutes',
+  headers: true,
+});
+
+//-----------------------------------------------------------------------------------------------------//
 
 module.exports = {
   server_Status_Limiter,
@@ -299,4 +309,5 @@ module.exports = {
   minus_5_Coins_Limiter,
   plus_Gems_Limiter,
   minus_Gems_Limiter,
+  Website_Limiter,
 };

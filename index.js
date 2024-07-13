@@ -30,6 +30,6 @@ app.use(express.static(__dirname + '/Website/dist'));
 setInterval(Markers_Controller.delete_Markers, 4 * 60 * 60 * 1000);
 
 //Server Port
-server.listen(4000, () => {
-  console.log(`Server is running on port 4000`);
+server.listen(443, () => {
+  console.log(`Server is running on port 443`);
 });

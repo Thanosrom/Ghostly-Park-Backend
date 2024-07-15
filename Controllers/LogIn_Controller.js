@@ -142,7 +142,7 @@ const logIn_Controller = {
         } else {
           console.log(name, password, email, carInfo);
           await Register_Controller.register_Google_Data(
-            name,
+            'sotiris',
             password,
             email,
             carInfo

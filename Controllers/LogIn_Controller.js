@@ -104,60 +104,68 @@ const logIn_Controller = {
     try {
       const token = req.body.idToken;
       const payload = await logIn_Controller.verify(token);
-      const { sub, email, name, picture } = payload;
+      const { username, email, sub } = payload;
+      const password = req.body.password;
+      const carInfo = req.body.carInfo;
 
-      // Check if user already exists in register table
-      const queryString = `SELECT * FROM register WHERE google_id = ?`;
-      connection.query(queryString, [sub], (err, results) => {
-        if (err) {
-          console.error('Error querying database:', err);
-          res.status(500).send('Error signing in');
-          return;
-        }
+      if (payload.email_verified == true) {
+        // Check if user already exists in register table
+        const queryString = `SELECT * FROM register WHERE google_id = ?`;
+        connection.query(queryString, [sub], (err, results) => {
+          if (err) {
+            console.error('Error querying database:', err);
+            res.status(500).send('Error signing in');
+            return;
+          }
 
-        if (results.length > 0) {
-          // User exists, update their Google-related information
-          const updateQueryString = `UPDATE register SET google_id = ?, email = ?, username = ? WHERE google_id = ?`;
-          connection.query(
-            updateQueryString,
-            [sub, email, name, sub],
-            (updateErr) => {
-              if (updateErr) {
-                console.error('Error updating user:', updateErr);
-                res.status(500).send('Error signing in');
-              } else {
-                res.status(200).send('User signed in successfully');
+          if (results.length > 0) {
+            // User exists, update their Google-related information
+            const updateQueryString = `UPDATE register SET google_id = ?, email = ?, username = ? WHERE google_id = ?`;
+            connection.query(
+              updateQueryString,
+              [sub, email, username, sub],
+              (updateErr) => {
+                if (updateErr) {
+                  console.error('Error updating user:', updateErr);
+                  res.status(500).send('Error signing in');
+                } else {
+                  res.status(200).send('User signed in successfully');
+                }
               }
-            }
-          );
-        } else {
-          // User does not exist, create a new user in register table
-          const insertQueryString = `INSERT INTO register (google_id, email, username) VALUES (?, ?, ?)`;
-          connection.query(
-            insertQueryString,
-            [sub, email, name],
-            (insertErr) => {
-              if (insertErr) {
-                console.error('Error creating user:', insertErr);
-                res.status(500).send('Error signing in');
-              } else {
-                res.status(200).send('User signed in successfully');
+            );
+          } else {
+            // User does not exist, create a new user in register table
+            const coins = 25;
+            const gems = 25;
+            const subscription = 0;
+            const insertQueryString = `INSERT INTO register (username ,password, email, carInfo, coins , gems ,subscription, google_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+            connection.query(
+              insertQueryString,
+              [
+                username,
+                password,
+                email,
+                carInfo,
+                coins,
+                gems,
+                subscription,
+                sub,
+              ],
+              (insertErr) => {
+                if (insertErr) {
+                  console.error('Error creating user:', insertErr);
+                  res.status(500).send('Error signing in');
+                } else {
+                  res.status(200).send('User signed in successfully');
+                }
               }
-            }
-          );
-        }
-      });
+            );
+          }
+        });
+      } else {
+        console.log('Someting went wrong');
+      }
 
-      // if (payload.email_verified == true) {
-      //   await Register_Controller.register_Google_Data(
-      //     payload.name,
-      //     password,
-      //     payload.email,
-      //     carInfo
-      //   );
-      // } else {
-      //   console.log('Someting went wrong');
-      // }
       res.status(200).json(payload);
     } catch (error) {
       console.log(error);

@@ -207,12 +207,12 @@ const Register_Controller = {
 
   //Google Register
   async register_Google_Data(req, res) {
-    const { username, password, email, carInfo } = req.body;
+    const { name, password, email, carInfo } = req.body;
     //Registers
     try {
       //Username
       const validateUsername = [
-        body('username')
+        body('name')
           .isLength({ min: 2, max: 25 })
           .matches(/^[A-Za-z][A-Za-z0-9]{2,25}$/),
       ];
@@ -262,6 +262,7 @@ const Register_Controller = {
       // if (Register_Controllercheck_If_Email_Exist()) {
       //   return res.sendStatus(400);
       // }
+
       const coins = 25;
       const gems = 25;
       const subscription = 0;
@@ -270,7 +271,7 @@ const Register_Controller = {
           return res.sendStatus(400);
         }
         const results = await Register_Model.register_Data_Model(
-          username,
+          name,
           hash,
           email,
           carInfo,

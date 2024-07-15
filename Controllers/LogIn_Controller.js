@@ -11,6 +11,7 @@ const { OAuth2Client } = require('google-auth-library');
 const { body, validationResult } = require('express-validator');
 //Tokens
 const jwt = require('jsonwebtoken');
+const Register_Controller = require('./Register_Controller');
 //Keys
 //For Apple Auth
 // const clientId = 'YOUR_APPLE_CLIENT_ID';
@@ -89,7 +90,7 @@ const logIn_Controller = {
       const client = new OAuth2Client(process.env.GOOGLE_AUTH_TOKEN);
       const ticket = await client.verifyIdToken({
         idToken: token,
-        audience: process.env.GOOGLE_AUTH_TOKEN,
+        //audience: process.env.GOOGLE_AUTH_TOKEN,
       });
       const payload = ticket.getPayload();
       return payload;
@@ -102,9 +103,61 @@ const logIn_Controller = {
   async auth_google(req, res) {
     try {
       const token = req.body.idToken;
-      console.log(token);
       const payload = await logIn_Controller.verify(token);
-      console.log(payload);
+      const { sub, email, name, picture } = payload;
+
+      // Check if user already exists in register table
+      const queryString = `SELECT * FROM register WHERE google_id = ?`;
+      connection.query(queryString, [sub], (err, results) => {
+        if (err) {
+          console.error('Error querying database:', err);
+          res.status(500).send('Error signing in');
+          return;
+        }
+
+        if (results.length > 0) {
+          // User exists, update their Google-related information
+          const updateQueryString = `UPDATE register SET google_id = ?, email = ?, username = ? WHERE google_id = ?`;
+          connection.query(
+            updateQueryString,
+            [sub, email, name, sub],
+            (updateErr) => {
+              if (updateErr) {
+                console.error('Error updating user:', updateErr);
+                res.status(500).send('Error signing in');
+              } else {
+                res.status(200).send('User signed in successfully');
+              }
+            }
+          );
+        } else {
+          // User does not exist, create a new user in register table
+          const insertQueryString = `INSERT INTO register (google_id, email, username) VALUES (?, ?, ?)`;
+          connection.query(
+            insertQueryString,
+            [sub, email, name],
+            (insertErr) => {
+              if (insertErr) {
+                console.error('Error creating user:', insertErr);
+                res.status(500).send('Error signing in');
+              } else {
+                res.status(200).send('User signed in successfully');
+              }
+            }
+          );
+        }
+      });
+
+      // if (payload.email_verified == true) {
+      //   await Register_Controller.register_Google_Data(
+      //     payload.name,
+      //     password,
+      //     payload.email,
+      //     carInfo
+      //   );
+      // } else {
+      //   console.log('Someting went wrong');
+      // }
       res.status(200).json(payload);
     } catch (error) {
       console.log(error);

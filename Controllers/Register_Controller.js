@@ -211,18 +211,18 @@ const Register_Controller = {
     //Registers
     try {
       //Username
-      const validateUsername = [
-        body('name')
-          .isLength({ min: 2, max: 25 })
-          .matches(/^[A-Za-z][A-Za-z0-9]{2,25}$/),
-      ];
-      await Promise.all(
-        validateUsername.map((validation) => validation.run(req))
-      );
-      const errorsUsername = validationResult(req);
-      if (!errorsUsername.isEmpty()) {
-        return res.sendStatus(400);
-      }
+      // const validateUsername = [
+      //   body('name')
+      //     .isLength({ min: 2, max: 25 })
+      //     .matches(/^[A-Za-z][A-Za-z0-9]{2,25}$/),
+      // ];
+      // await Promise.all(
+      //   validateUsername.map((validation) => validation.run(req))
+      // );
+      // const errorsUsername = validationResult(req);
+      // if (!errorsUsername.isEmpty()) {
+      //   return res.sendStatus(400);
+      // }
       //Password
       const validatePassword = [
         body('password')

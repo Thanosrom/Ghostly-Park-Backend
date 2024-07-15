@@ -154,7 +154,7 @@ const logIn_Controller = {
 
       res.status(200).json(payload);
     } catch (error) {
-      console.log(error);
+      console.log(error + 'O YEAH');
       res.status(401).json({ error: 'Invalid token' });
     }
   },

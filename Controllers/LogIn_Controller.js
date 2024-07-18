@@ -145,6 +145,7 @@ const logIn_Controller = {
         } else {
           //Register the User
           const results = await Register_Controller.register_Google_Data(
+            given_name,
             password,
             email,
             carInfo

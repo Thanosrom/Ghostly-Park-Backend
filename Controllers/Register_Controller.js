@@ -207,8 +207,8 @@ const Register_Controller = {
 
   //Google Register
   async register_Google_Data(req, res) {
-    const { name, password, email, carInfo } = req.body;
-    console.log(name, password, email, carInfo);
+    const { given_name, password, email, carInfo } = req.body;
+    console.log(given_name, password, email, carInfo);
     console.log('aaaaaaaaaaaaaaaaaaaaaaaaa');
     //Registers
     try {
@@ -273,7 +273,7 @@ const Register_Controller = {
           return res.sendStatus(400);
         }
         const results = await Register_Model.register_Data_Model(
-          name,
+          given_name,
           hash,
           email,
           carInfo,

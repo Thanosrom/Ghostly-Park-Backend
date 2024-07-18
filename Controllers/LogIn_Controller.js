@@ -109,7 +109,7 @@ const logIn_Controller = {
       const token = req.body.idToken;
       const payload = await logIn_Controller.verify(token);
       console.log(payload);
-      const { name, email, sub } = payload;
+      const { given_name, email, sub } = payload;
 
       const password = req.body.password;
       const carInfo = req.body.carInfo;
@@ -133,7 +133,7 @@ const logIn_Controller = {
           const updateQueryString = `UPDATE register SET google_id = ?, email = ?, username = ? WHERE google_id = ?`;
           dbConnection.query(
             updateQueryString,
-            [sub, email, name, sub],
+            [sub, email, given_name, sub],
             (updateErr) => {
               if (updateErr) {
                 console.error('Error updating user:', updateErr);
@@ -144,9 +144,9 @@ const logIn_Controller = {
             }
           );
         } else {
-          console.log(name, password, email, carInfo);
+          console.log(given_name, password, email, carInfo);
           const results = await Register_Controller.register_Google_Data(
-            name,
+            given_name,
             password,
             email,
             carInfo

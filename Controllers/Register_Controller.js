@@ -254,14 +254,14 @@ const Register_Controller = {
           subscription
         );
         if (results) {
-          return res.sendStatus(200);
+          return true;
         } else {
-          return res.sendStatus(400);
+          return false;
         }
       });
     } catch (error) {
       console.log(error);
-      res.sendStatus(400);
+      return false;
     }
   },
 };

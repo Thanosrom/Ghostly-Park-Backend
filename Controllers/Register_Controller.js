@@ -209,33 +209,33 @@ const Register_Controller = {
   async register_Google_Data(username, password, email, carInfo) {
     //Registers
     try {
-      const validateUsername = username.match(/^[A-Za-z][A-Za-z0-9]{2,25}$/);
-      if (!validateUsername) {
-        throw new Error('Invalid username format');
-      }
+      // const validateUsername = username.match(/^[A-Za-z][A-Za-z0-9]{2,25}$/);
+      // if (!validateUsername) {
+      //   throw new Error('Invalid username format');
+      // }
 
-      const validatePassword = password.match(
-        /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/
-      );
-      if (!validatePassword) {
-        throw new Error('Invalid password format');
-      }
+      // const validatePassword = password.match(
+      //   /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/
+      // );
+      // if (!validatePassword) {
+      //   throw new Error('Invalid password format');
+      // }
 
-      const validateEmail = email.match(
-        /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/
-      );
-      if (!validateEmail) {
-        throw new Error('Invalid email format');
-      }
+      // const validateEmail = email.match(
+      //   /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/
+      // );
+      // if (!validateEmail) {
+      //   throw new Error('Invalid email format');
+      // }
 
-      const validateCarInfo = carInfo.match(/^[A-Za-z0-9\s-]{2,25}$/);
-      if (!validateCarInfo) {
-        throw new Error('Invalid car info format');
-      }
+      // const validateCarInfo = carInfo.match(/^[A-Za-z0-9\s-]{2,25}$/);
+      // if (!validateCarInfo) {
+      //   throw new Error('Invalid car info format');
+      // }
 
-      if (Register_Controllercheck_If_Email_Exist()) {
-        return res.sendStatus(400);
-      }
+      // if (Register_Controllercheck_If_Email_Exist()) {
+      //   return res.sendStatus(400);
+      // }
 
       const coins = 25;
       const gems = 25;

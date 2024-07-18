@@ -32,7 +32,16 @@ async function register_Data_Model(
   try {
     let sql;
     let params;
-
+    console.log(
+      username,
+      password,
+      email,
+      carInfo,
+      coins,
+      gems,
+      subscription,
+      sub
+    );
     if (sub !== undefined && sub !== null) {
       console.log(111111111111);
       sql =
@@ -53,7 +62,10 @@ async function register_Data_Model(
         'INSERT INTO register (username, password, email, carInfo, coins, gems, subscription) VALUES (?, ?, ?, ?, ?, ?, ?)';
       params = [username, password, email, carInfo, coins, gems, subscription];
     }
+    console.log('SQL:', sql);
+    console.log('Params:', params);
     const [results] = await dbConnection.execute(sql, params);
+    console.log('Results:', results);
     return results.affectedRows === 1;
   } catch (error) {
     return false;

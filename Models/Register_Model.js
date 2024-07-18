@@ -27,6 +27,7 @@ async function register_Data_Model(
   sub
 ) {
   const dbConnection = await createDbConnection();
+  console.log(sub);
 
   try {
     let sql;

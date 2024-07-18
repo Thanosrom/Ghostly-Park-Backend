@@ -236,7 +236,7 @@ const Register_Controller = {
       // if (Register_Controllercheck_If_Email_Exist()) {
       //   return res.sendStatus(400);
       // }
-
+      console.log(sub);
       const coins = 25;
       const gems = 25;
       const subscription = 0;

@@ -117,6 +117,8 @@ const logIn_Controller = {
       console.log(carInfo);
 
       if (payload.email_verified == true) {
+        console.log(444444444);
+
         // Check if user already exists in register table
         const [results] = await dbConnection.execute(
           `SELECT * FROM register WHERE google_id = ?`,
@@ -129,6 +131,7 @@ const logIn_Controller = {
         }
 
         if (results.length > 0) {
+          console.log(11111111111);
           // User exists, update their Google-related information
           const updateQueryString = `UPDATE register SET google_id = ?, email = ?, username = ? WHERE google_id = ?`;
           dbConnection.query(
@@ -144,6 +147,7 @@ const logIn_Controller = {
             }
           );
         } else {
+          console.log(222222222);
           console.log(given_name, password, email, carInfo);
           const results = await Register_Controller.register_Google_Data(
             payload.given_name,
@@ -156,6 +160,7 @@ const logIn_Controller = {
       } else {
         console.log('Someting went wrong');
       }
+      console.log(333333333);
 
       res.status(200).json(payload);
     } catch (error) {

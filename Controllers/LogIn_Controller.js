@@ -108,21 +108,18 @@ const logIn_Controller = {
       const dbConnection = await createDbConnection();
       const token = req.body.idToken;
       const payload = await logIn_Controller.verify(token);
-      console.log(payload);
-      const { given_name, email, sub } = payload;
-
+      //Payload Variables
+      const given_name = payload.given_name;
+      const email = payload.emaill;
+      const sub = payload.sub;
       const password = req.body.password;
       const carInfo = req.body.carInfo;
-      console.log(password);
-      console.log(carInfo);
 
       if (payload.email_verified == true) {
-        console.log(444444444);
-
         // Check if user already exists in register table
         const [results] = await dbConnection.execute(
           `SELECT * FROM register WHERE google_id = ?`,
-          [payload.sub]
+          [sub]
         );
         if (!results) {
           console.error('Error querying database:', err);
@@ -131,12 +128,11 @@ const logIn_Controller = {
         }
 
         if (results.length > 0) {
-          console.log(11111111111);
           // User exists, update their Google-related information
           const updateQueryString = `UPDATE register SET google_id = ?, email = ?, username = ? WHERE google_id = ?`;
           dbConnection.query(
             updateQueryString,
-            [payload.sub, payload.email, payload.given_name, payload.sub],
+            [sub, email, given_name, sub],
             (updateErr) => {
               if (updateErr) {
                 console.error('Error updating user:', updateErr);
@@ -147,24 +143,22 @@ const logIn_Controller = {
             }
           );
         } else {
-          console.log(222222222);
-          console.log(given_name, password, email, carInfo);
+          //Register the User
           const results = await Register_Controller.register_Google_Data(
-            payload.given_name,
-            payload.password,
-            payload.email,
-            payload.carInfo
+            given_name,
+            password,
+            email,
+            carInfo
           );
           console.log(results);
         }
       } else {
-        console.log('Someting went wrong');
+        console.log('Email is not Verified');
       }
-      console.log(333333333);
 
       res.status(200).json(payload);
     } catch (error) {
-      console.log(error + 'O YEAH');
+      console.log(error);
       res.status(401).json({ error: 'Invalid token' });
     }
   },

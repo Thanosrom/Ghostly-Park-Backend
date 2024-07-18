@@ -45,7 +45,7 @@ async function register_Data_Model(
     if (sub !== undefined && sub !== null) {
       console.log(111111111111);
       sql =
-        'INSERT INTO register (username, password, email, carInfo, coins, gems, subscription, sub) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        'INSERT INTO register (username, password, email, carInfo, coins, gems, subscription, google_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
       params = [
         username,
         password,

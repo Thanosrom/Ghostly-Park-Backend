@@ -23,15 +23,34 @@ async function register_Data_Model(
   carInfo,
   coins,
   gems,
-  subscription
+  subscription,
+  sub
 ) {
   const dbConnection = await createDbConnection();
 
   try {
-    const [results] = await dbConnection.execute(
-      'INSERT INTO register (username, password, email, carInfo, coins, gems, subscription) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [username, password, email, carInfo, coins, gems, subscription]
-    );
+    let sql;
+    let params;
+
+    if (sub !== undefined && sub !== null) {
+      sql =
+        'INSERT INTO register (username, password, email, carInfo, coins, gems, subscription, sub) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+      params = [
+        username,
+        password,
+        email,
+        carInfo,
+        coins,
+        gems,
+        subscription,
+        sub,
+      ];
+    } else {
+      sql =
+        'INSERT INTO register (username, password, email, carInfo, coins, gems, subscription) VALUES (?, ?, ?, ?, ?, ?, ?)';
+      params = [username, password, email, carInfo, coins, gems, subscription];
+    }
+    const [results] = await dbConnection.execute(sql, params);
     return results.affectedRows === 1;
   } catch (error) {
     return false;

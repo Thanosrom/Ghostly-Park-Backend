@@ -148,7 +148,8 @@ const logIn_Controller = {
             given_name,
             password,
             email,
-            carInfo
+            carInfo,
+            sub
           );
           console.log(results);
         }

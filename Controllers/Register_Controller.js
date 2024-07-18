@@ -206,7 +206,7 @@ const Register_Controller = {
   },
 
   //Google Register
-  async register_Google_Data(username, password, email, carInfo) {
+  async register_Google_Data(username, password, email, carInfo, sub) {
     //Registers
     try {
       // const validateUsername = username.match(/^[A-Za-z][A-Za-z0-9]{2,25}$/);
@@ -251,7 +251,8 @@ const Register_Controller = {
           carInfo,
           coins,
           gems,
-          subscription
+          subscription,
+          sub
         );
         if (results) {
           return true;

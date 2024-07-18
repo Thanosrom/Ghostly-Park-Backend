@@ -145,12 +145,13 @@ const logIn_Controller = {
           );
         } else {
           console.log(name, password, email, carInfo);
-          await Register_Controller.register_Google_Data(
+          const results = await Register_Controller.register_Google_Data(
             name,
             password,
             email,
             carInfo
           );
+          console.log(results);
         }
       } else {
         console.log('Someting went wrong');

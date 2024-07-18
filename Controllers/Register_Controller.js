@@ -225,40 +225,40 @@ const Register_Controller = {
       //   return res.sendStatus(400);
       // }
       //Password
-      const validatePassword = [
-        body('password')
-          .isLength({ min: 8, max: 25 })
-          .matches(
-            /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/
-          ),
-      ];
-      await Promise.all(
-        validatePassword.map((validation) => validation.run(req))
-      );
-      const errorsPassword = validationResult(req);
-      if (!errorsPassword.isEmpty()) {
-        return res.sendStatus(400);
-      }
-      //Email
-      const validateEmail = [body('email').isEmail()];
-      await Promise.all(validateEmail.map((validation) => validation.run(req)));
-      const errorsEmail = validationResult(req);
-      if (!errorsEmail.isEmpty()) {
-        return res.sendStatus(400);
-      }
-      //Car
-      const changeCarInfoValidation = [
-        body('carInfo')
-          .matches(/^[A-Za-z0-9\s-]{2,25}$/)
-          .isLength({ min: 2, max: 25 }),
-      ];
-      await Promise.all(
-        changeCarInfoValidation.map((validation) => validation.run(req))
-      );
-      const carErrors = validationResult(req);
-      if (!carErrors.isEmpty()) {
-        return res.sendStatus(400);
-      }
+      // const validatePassword = [
+      //   body('password')
+      //     .isLength({ min: 8, max: 25 })
+      //     .matches(
+      //       /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/
+      //     ),
+      // ];
+      // await Promise.all(
+      //   validatePassword.map((validation) => validation.run(req))
+      // );
+      // const errorsPassword = validationResult(req);
+      // if (!errorsPassword.isEmpty()) {
+      //   return res.sendStatus(400);
+      // }
+      // //Email
+      // const validateEmail = [body('email').isEmail()];
+      // await Promise.all(validateEmail.map((validation) => validation.run(req)));
+      // const errorsEmail = validationResult(req);
+      // if (!errorsEmail.isEmpty()) {
+      //   return res.sendStatus(400);
+      // }
+      // //Car
+      // const changeCarInfoValidation = [
+      //   body('carInfo')
+      //     .matches(/^[A-Za-z0-9\s-]{2,25}$/)
+      //     .isLength({ min: 2, max: 25 }),
+      // ];
+      // await Promise.all(
+      //   changeCarInfoValidation.map((validation) => validation.run(req))
+      // );
+      // const carErrors = validationResult(req);
+      // if (!carErrors.isEmpty()) {
+      //   return res.sendStatus(400);
+      // }
 
       // if (Register_Controllercheck_If_Email_Exist()) {
       //   return res.sendStatus(400);

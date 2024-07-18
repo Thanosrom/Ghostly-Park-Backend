@@ -209,51 +209,28 @@ const Register_Controller = {
   async register_Google_Data(username, password, email, carInfo) {
     //Registers
     try {
-      const validateUsername = [
-        body('username')
-          .isLength({ min: 2, max: 25 })
-          .matches(/^[A-Za-z][A-Za-z0-9]{2,25}$/),
-      ];
-      await Promise.all(
-        validateUsername.map((validation) => validation.run(req))
-      );
-      const errorsUsername = validationResult(req);
-      if (!errorsUsername.isEmpty()) {
-        return res.sendStatus(400);
+      const validateUsername = username.match(/^[A-Za-z][A-Za-z0-9]{2,25}$/);
+      if (!validateUsername) {
+        throw new Error('Invalid username format');
       }
-      const validatePassword = [
-        body('password')
-          .isLength({ min: 8, max: 25 })
-          .matches(
-            /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/
-          ),
-      ];
-      await Promise.all(
-        validatePassword.map((validation) => validation.run(req))
+
+      const validatePassword = password.match(
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/
       );
-      const errorsPassword = validationResult(req);
-      if (!errorsPassword.isEmpty()) {
-        return res.sendStatus(400);
+      if (!validatePassword) {
+        throw new Error('Invalid password format');
       }
-      //Email
-      const validateEmail = [body('email').isEmail()];
-      await Promise.all(validateEmail.map((validation) => validation.run(req)));
-      const errorsEmail = validationResult(req);
-      if (!errorsEmail.isEmpty()) {
-        return res.sendStatus(400);
-      }
-      //Car
-      const changeCarInfoValidation = [
-        body('carInfo')
-          .matches(/^[A-Za-z0-9\s-]{2,25}$/)
-          .isLength({ min: 2, max: 25 }),
-      ];
-      await Promise.all(
-        changeCarInfoValidation.map((validation) => validation.run(req))
+
+      const validateEmail = email.match(
+        /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/
       );
-      const carErrors = validationResult(req);
-      if (!carErrors.isEmpty()) {
-        return res.sendStatus(400);
+      if (!validateEmail) {
+        throw new Error('Invalid email format');
+      }
+
+      const validateCarInfo = carInfo.match(/^[A-Za-z0-9\s-]{2,25}$/);
+      if (!validateCarInfo) {
+        throw new Error('Invalid car info format');
       }
 
       if (Register_Controllercheck_If_Email_Exist()) {

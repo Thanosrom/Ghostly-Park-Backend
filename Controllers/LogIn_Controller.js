@@ -110,7 +110,10 @@ const logIn_Controller = {
       const payload = await logIn_Controller.verify(token);
       //Payload Variables
       const given_name = payload.given_name;
-      const email = payload.emaill;
+      console.log(given_name);
+      const given_name2 = given_name;
+      console.log(given_name2);
+      const email = payload.email;
       const sub = payload.sub;
       const password = req.body.password;
       const carInfo = req.body.carInfo;

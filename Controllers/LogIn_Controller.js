@@ -113,6 +113,8 @@ const logIn_Controller = {
 
       const password = req.body.password;
       const carInfo = req.body.carInfo;
+      console.log(password);
+      console.log(carInfo);
 
       if (payload.email_verified == true) {
         // Check if user already exists in register table

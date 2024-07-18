@@ -206,14 +206,11 @@ const Register_Controller = {
   },
 
   //Google Register
-  async register_Google_Data(given_name, password, email, carInfo) {
-    console.log(password, email, carInfo);
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaa');
+  async register_Google_Data(username, password, email, carInfo) {
     //Registers
     try {
-      Username;
       const validateUsername = [
-        body('name')
+        body('username')
           .isLength({ min: 2, max: 25 })
           .matches(/^[A-Za-z][A-Za-z0-9]{2,25}$/),
       ];
@@ -224,7 +221,6 @@ const Register_Controller = {
       if (!errorsUsername.isEmpty()) {
         return res.sendStatus(400);
       }
-      Password;
       const validatePassword = [
         body('password')
           .isLength({ min: 8, max: 25 })
@@ -272,7 +268,7 @@ const Register_Controller = {
           return res.sendStatus(400);
         }
         const results = await Register_Model.register_Data_Model(
-          given_name,
+          username,
           hash,
           email,
           carInfo,

@@ -108,7 +108,9 @@ const logIn_Controller = {
       const dbConnection = await createDbConnection();
       const token = req.body.idToken;
       const payload = await logIn_Controller.verify(token);
+      console.log(payload);
       const { name, email, sub } = payload;
+
       const password = req.body.password;
       const carInfo = req.body.carInfo;
 
@@ -142,7 +144,7 @@ const logIn_Controller = {
         } else {
           console.log(name, password, email, carInfo);
           await Register_Controller.register_Google_Data(
-            'sotiris',
+            name,
             password,
             email,
             carInfo

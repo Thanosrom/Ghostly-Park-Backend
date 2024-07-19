@@ -116,11 +116,13 @@ const logIn_Controller = {
       const carInfo = req.body.carInfo;
 
       if (payload.email_verified == true) {
+        console.log(2222222);
         // Check if user already exists in register table
         const [results] = await dbConnection.execute(
           `SELECT * FROM register WHERE google_id = ?`,
           [sub]
         );
+        console.log(results);
         if (!results) {
           console.error('Error querying database:', err);
           res.status(500).send('Error signing in');
@@ -128,8 +130,10 @@ const logIn_Controller = {
         }
 
         if (results.length > 0) {
+          console.log(1111111111);
           // User exists, update their Google-related information
           const updateQueryString = `UPDATE register SET google_id = ?, email = ?, username = ? WHERE google_id = ?`;
+          console.log(updateQueryString);
           dbConnection.query(
             updateQueryString,
             [sub, email, given_name, sub],

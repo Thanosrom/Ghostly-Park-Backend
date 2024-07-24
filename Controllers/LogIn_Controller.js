@@ -113,8 +113,6 @@ const logIn_Controller = {
       const given_name = payload.given_name;
       const email = payload.email;
       const sub = payload.sub;
-      const password = req.body.password;
-      const carInfo = req.body.carInfo;
 
       if (payload.email_verified == true) {
         // Check if user already exists in register table
@@ -149,9 +147,9 @@ const logIn_Controller = {
           //Register the User
           const results = await Register_Controller.register_Google_Data(
             given_name,
-            password,
+            '',
             email,
-            carInfo,
+            '',
             sub
           );
           console.log(results);

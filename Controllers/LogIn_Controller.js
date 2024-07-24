@@ -41,22 +41,23 @@ const logIn_Controller = {
         return res.sendStatus(400);
       }
       //Password
-      const validatePassword = [
-        body('password')
-          .isLength({ min: 8, max: 25 })
-          .matches(
-            /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/
-          ),
-      ];
-      await Promise.all(
-        validatePassword.map((validation) => validation.run(req))
-      );
-      const errorsPassword = validationResult(req);
+      if (password != 'GoogleSignIn123') {
+        const validatePassword = [
+          body('password')
+            .isLength({ min: 8, max: 25 })
+            .matches(
+              /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/
+            ),
+        ];
+        await Promise.all(
+          validatePassword.map((validation) => validation.run(req))
+        );
+        const errorsPassword = validationResult(req);
 
-      if (!errorsPassword.isEmpty()) {
-        return res.sendStatus(400);
+        if (!errorsPassword.isEmpty()) {
+          return res.sendStatus(400);
+        }
       }
-
       const results = await LogIn_Model.login_Model(email);
       if (results.length === 0) {
         res.sendStatus(401);

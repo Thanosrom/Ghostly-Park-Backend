@@ -89,6 +89,7 @@ const logIn_Controller = {
     }
   },
 
+  //Google Config
   async verify(token) {
     try {
       const client = new OAuth2Client(process.env.GOOGLE_AUTH_TOKEN);
@@ -161,6 +162,42 @@ const logIn_Controller = {
     } catch (error) {
       console.log(error);
       res.status(401).json({ error: 'Invalid token' });
+    }
+  },
+
+  async google_Login(req, res) {
+    const { email } = req.body;
+    try {
+      //Email
+      const validateEmail = [body('email').isEmail()];
+      await Promise.all(validateEmail.map((validation) => validation.run(req)));
+      const errorsEmail = validationResult(req);
+      if (!errorsEmail.isEmpty()) {
+        return res.sendStatus(400);
+      }
+
+      const results = await LogIn_Model.login_Model(email);
+      if (results.length === 0) {
+        res.sendStatus(401);
+      } else {
+        const payload = { id: results[0].id };
+        const token = jwt.sign(payload, process.env.SECRET_KEY, {
+          expiresIn: '2h',
+        });
+        const response = {
+          status: 200,
+          token: token,
+          userId: results[0].id,
+          email: results[0].email,
+          username: results[0].username,
+          carInfo: results[0].carInfo,
+          coins: results[0].coins,
+          gems: results[0].gems,
+        };
+        res.status(200).json(response);
+      }
+    } catch (error) {
+      console.log(error);
     }
   },
 

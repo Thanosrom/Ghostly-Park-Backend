@@ -62,6 +62,14 @@ const auth_google_Limiter = rateLimit({
   headers: true,
 });
 
+const google_Login_Limiter = rateLimit({
+  WindowMs: 10 * 1000,
+  max: 10,
+  message:
+    'Too many login attempts from this IP, please try again after some minutes',
+  headers: true,
+});
+
 const auth_apple_Limiter = rateLimit({
   WindowMs: 10 * 1000,
   max: 10,
@@ -285,6 +293,7 @@ module.exports = {
   delete_Account_Steps_Limiter,
   login_Limiter,
   auth_google_Limiter,
+  google_Login_Limiter,
   auth_apple_Limiter,
   send_Digit_Code_Limiter,
   check_If_Email_Exist_Limiter,

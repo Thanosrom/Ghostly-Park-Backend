@@ -34,6 +34,7 @@ const {
   delete_Account_Steps_Limiter,
   login_Limiter,
   auth_google_Limiter,
+  google_Login_Limiter,
   auth_apple_Limiter,
   send_Digit_Code_Limiter,
   check_If_Email_Exist_Limiter,
@@ -91,6 +92,11 @@ router.get(
 //Login
 router.post('/login', login_Limiter, LogIn_Controller.login);
 router.post('/auth_google', auth_google_Limiter, LogIn_Controller.auth_google);
+router.post(
+  '/google_Login',
+  google_Login_Limiter,
+  LogIn_Controller.google_Login
+);
 //router.post('/auth_apple',auth_apple_Limiter,LogIn_Controller.auth_apple);
 
 //Register

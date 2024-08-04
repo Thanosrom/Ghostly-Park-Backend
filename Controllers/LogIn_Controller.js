@@ -34,30 +34,22 @@ const logIn_Controller = {
     const { email, password } = req.body;
     try {
       //Email
-      const validateEmail = [body('email').isEmail()];
-      await Promise.all(validateEmail.map((validation) => validation.run(req)));
+      await body('email').isEmail().withMessage('Invalid email format').run(req);
       const errorsEmail = validationResult(req);
       if (!errorsEmail.isEmpty()) {
-        return res.sendStatus(400);
+        return res.status(400).json({ errors: errorsEmail.array() });
       }
       //Password
-      if (password != 'GoogleSignIn123') {
-        const validatePassword = [
-          body('password')
-            .isLength({ min: 8, max: 25 })
-            .matches(
-              /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/
-            ),
-        ];
-        await Promise.all(
-          validatePassword.map((validation) => validation.run(req))
-        );
-        const errorsPassword = validationResult(req);
-
-        if (!errorsPassword.isEmpty()) {
-          return res.sendStatus(400);
-        }
+      await body('password')
+      .isLength({ min: 8, max: 25 }).withMessage('Password must be between 8 and 25 characters')
+      .isStrongPassword({ minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 })
+      .withMessage('Password must contain at least 1 lowercase letter, 1 uppercase letter, and 1 number')
+      .run(req);
+      const errorsPassword = validationResult(req);
+      if (!errorsPassword.isEmpty()) {
+        return res.status(400).json({ errors: errorsPassword.array() });
       }
+      // Fetch user and compare password
       const results = await LogIn_Model.login_Model(email);
       if (results.length === 0) {
         res.sendStatus(401);

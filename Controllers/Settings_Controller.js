@@ -20,7 +20,20 @@ const Settings_Controller = {
       const validateUsername = [
         body('newUsername')
           .isLength({ min: 2, max: 25 })
-          .matches(/^[A-Za-z][A-Za-z0-9]{2,25}$/),
+          .custom(value => {
+            const unicodeLetterStart = /^\p{L}/u; // Unicode letter at the start
+            if (!unicodeLetterStart.test(value)) {
+              throw new Error('Username must start with a letter');
+            }
+            return true;
+          })
+          .custom(value => {
+            const allowedCharacters = /^[\p{L}\p{N}_-]+$/u; // Unicode letters, numbers, - and _
+            if (!allowedCharacters.test(value)) {
+              throw new Error('Username must contain only letters, numbers, - and _');
+            }
+            return true;
+          })
       ];
       await Promise.all(
         validateUsername.map((validation) => validation.run(req))
@@ -73,9 +86,12 @@ const Settings_Controller = {
       const validatePassword = [
         body('newPassword')
           .isLength({ min: 8, max: 25 })
-          .matches(
-            /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/
-          ),
+          .isStrongPassword({
+            minLowercase:1,
+            minUppercase:1,
+            minNumbers:1,
+            minSymbols:0
+          })
       ];
       await Promise.all(
         validatePassword.map((validation) => validation.run(req))
@@ -120,8 +136,21 @@ const Settings_Controller = {
     try {
       const changeCarInfoValidation = [
         body('newCarInfo')
-          .matches(/^[A-Za-z0-9\s-]{2,25}$/)
-          .isLength({ min: 2, max: 25 }),
+          .isLength({ min: 2, max: 25 })
+          .custom(value => {
+            const unicodeLetterStart = /^\p{L}/u; // Unicode letter at the start
+            if (!unicodeLetterStart.test(value)) {
+              throw new Error('Username must start with a letter');
+            }
+            return true;
+          })
+          .custom(value => {
+            const allowedCharacters = /^[\p{L}\p{N}_-]+$/u; // Unicode letters, numbers, - and _
+            if (!allowedCharacters.test(value)) {
+              throw new Error('Username must contain only letters, numbers, - and _');
+            }
+            return true;
+          })
       ];
       await Promise.all(
         changeCarInfoValidation.map((validation) => validation.run(req))

@@ -125,54 +125,58 @@ const Register_Controller = {
     //Registers
     try {
       //Username
-      const validateUsername = [
-        body('username')
-          .isLength({ min: 2, max: 25 })
-          .matches(/^[A-Za-z][A-Za-z0-9]{2,25}$/),
-      ];
-      await Promise.all(
-        validateUsername.map((validation) => validation.run(req))
-      );
-      const errorsUsername = validationResult(req);
-      if (!errorsUsername.isEmpty()) {
-        return res.sendStatus(400);
-      }
-      //Password
-      const validatePassword = [
-        body('password')
-          .isLength({ min: 8, max: 25 })
-          .matches(
-            /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*[\\/#$<>%;&|(){}"`[\]]).{8,25}$/
-          ),
-      ];
-      await Promise.all(
-        validatePassword.map((validation) => validation.run(req))
-      );
-      const errorsPassword = validationResult(req);
-      if (!errorsPassword.isEmpty()) {
-        return res.sendStatus(400);
-      }
+      await body('username')
+          .isLength({ min: 2, max: 25 }).withMessage('Username must be between 2 and 25 characters')
+          .custom(value => {
+            const unicodeLetterStart = /^\p{L}/u;
+            if (!unicodeLetterStart.test(value)) {
+              throw new Error('Username must start with a letter');
+            }
+            return true;
+          })
+          .custom(value => {
+            const allowedCharacters = /^[\p{L}\p{N}_-]+$/u;
+            if (!allowedCharacters.test(value)) {
+              throw new Error('Username must contain only letters, numbers, - and _');
+            }
+            return true;
+          })
+
+        //Password
+        await body('password')
+        .isLength({ min: 8, max: 25 }).withMessage('Password must be between 8 and 25 characters')
+        .isStrongPassword({ minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 })
+        .withMessage('Password must contain at least 1 lowercase letter, 1 uppercase letter, and 1 number')
+        .run(req);
+        const errorsPassword = validationResult(req);
+        if (!errorsPassword.isEmpty()) {
+          return res.status(400).json({ errors: errorsPassword.array() });
+        }
       //Email
-      const validateEmail = [body('email').isEmail()];
-      await Promise.all(validateEmail.map((validation) => validation.run(req)));
+      await body('email').isEmail().withMessage('Invalid email format').run(req);
       const errorsEmail = validationResult(req);
       if (!errorsEmail.isEmpty()) {
-        return res.sendStatus(400);
+        return res.status(400).json({ errors: errorsEmail.array() });
       }
       //Car
-      const changeCarInfoValidation = [
-        body('carInfo')
-          .matches(/^[A-Za-z0-9\s-]{2,25}$/)
-          .isLength({ min: 2, max: 25 }),
-      ];
-      await Promise.all(
-        changeCarInfoValidation.map((validation) => validation.run(req))
-      );
-      const carErrors = validationResult(req);
-      if (!carErrors.isEmpty()) {
-        return res.sendStatus(400);
-      }
-
+      await body('carInfo')
+          .isLength({ min: 2, max: 25 }).withMessage('Car info must be between 2 and 25 characters')
+          .custom(value => {
+            const unicodeLetterStart = /^\p{L}/u;
+            if (!unicodeLetterStart.test(value)) {
+              throw new Error('Car info must start with a letter');
+            }
+            return true;
+          })
+          .custom(value => {
+            const allowedCharacters = /^[\p{L}\p{N}_-]+$/u;
+            if (!allowedCharacters.test(value)) {
+              throw new Error('Car info must contain only letters, numbers, - and _');
+            }
+            return true;
+          })
+    
+      //Start the registration proccess
       if (digitCode == verificationCode) {
         const coins = 25;
         const gems = 25;

@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 const express = require('express');
+//Validators
+const { usernameValidator, passwordValidator, emailValidator, carInfoValidator } = require('./validators');
 //Routes
 const router = express.Router();
 //Models
@@ -122,91 +124,40 @@ const Register_Controller = {
 
   async register_Data(req, res) {
     const { username, password, email, digitCode, carInfo } = req.body;
-    //Registers
+    // Apply Validators
     try {
-      //Username
-      await body('username')
-          .isLength({ min: 2, max: 25 }).withMessage('Username must be between 2 and 25 characters')
-          .custom(value => {
-            const unicodeLetterStart = /^\p{L}/u;
-            if (!unicodeLetterStart.test(value)) {
-              throw new Error('Username must start with a letter');
-            }
-            return true;
-          })
-          .custom(value => {
-            const allowedCharacters = /^[\p{L}\p{N}_-]+$/u;
-            if (!allowedCharacters.test(value)) {
-              throw new Error('Username must contain only letters, numbers, - and _');
-            }
-            return true;
-          })
 
-        //Password
-        await body('password')
-        .isLength({ min: 8, max: 25 }).withMessage('Password must be between 8 and 25 characters')
-        .isStrongPassword({ minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 })
-        .withMessage('Password must contain at least 1 lowercase letter, 1 uppercase letter, and 1 number')
-        .run(req);
-        const errorsPassword = validationResult(req);
-        if (!errorsPassword.isEmpty()) {
-          return res.status(400).json({ errors: errorsPassword.array() });
+    //Start the registration proccess
+    if (digitCode == verificationCode) {
+      const coins = 25;
+      const gems = 25;
+      const subscription = 0;
+      bcrypt.hash(password, saltRounds, async (err, hash) => {
+        if (err) {
+          return res.sendStatus(400);
         }
-      //Email
-      await body('email').isEmail().withMessage('Invalid email format').run(req);
-      const errorsEmail = validationResult(req);
-      if (!errorsEmail.isEmpty()) {
-        return res.status(400).json({ errors: errorsEmail.array() });
-      }
-      //Car
-      await body('carInfo')
-          .isLength({ min: 2, max: 25 }).withMessage('Car info must be between 2 and 25 characters')
-          .custom(value => {
-            const unicodeLetterStart = /^\p{L}/u;
-            if (!unicodeLetterStart.test(value)) {
-              throw new Error('Car info must start with a letter');
-            }
-            return true;
-          })
-          .custom(value => {
-            const allowedCharacters = /^[\p{L}\p{N}_-]+$/u;
-            if (!allowedCharacters.test(value)) {
-              throw new Error('Car info must contain only letters, numbers, - and _');
-            }
-            return true;
-          })
-    
-      //Start the registration proccess
-      if (digitCode == verificationCode) {
-        const coins = 25;
-        const gems = 25;
-        const subscription = 0;
-        bcrypt.hash(password, saltRounds, async (err, hash) => {
-          if (err) {
-            return res.sendStatus(400);
-          }
-          const results = await Register_Model.register_Data_Model(
-            username,
-            hash,
-            email,
-            carInfo,
-            coins,
-            gems,
-            subscription
-          );
-          if (results) {
-            return res.sendStatus(200);
-          } else {
-            return res.sendStatus(400);
-          }
-        });
-      } else {
-        return res.sendStatus(400);
-      }
-    } catch (error) {
-      console.log(error);
-      res.sendStatus(400);
+        const results = await Register_Model.register_Data_Model(
+          username,
+          hash,
+          email,
+          carInfo,
+          coins,
+          gems,
+          subscription
+        );
+        if (results) {
+          return res.sendStatus(200);
+        } else {
+          return res.sendStatus(400);
+        }
+      });
+    } else {
+      return res.sendStatus(400);
     }
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(400);
+  }
   },
 
   //Google Register

@@ -1,5 +1,13 @@
 const rateLimit = require('express-rate-limit');
 
+const utils_Limiter = rateLimit({
+  windowMs: 10 * 1000,
+  max: 10,
+  message:
+    'Too many login attempts from this IP, please try again after some minutes',
+  headers: true,
+});
+
 //Server Status
 const server_Status_Limiter = rateLimit({
   windowMs: 10 * 1000,
@@ -286,6 +294,7 @@ const Website_Limiter = rateLimit({
 //-----------------------------------------------------------------------------------------------------//
 
 module.exports = {
+  utils_Limiter,
   server_Status_Limiter,
   maintenance_Limiter,
   check_app_Version_Limiter,

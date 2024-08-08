@@ -23,10 +23,14 @@ const Markers_Controller = require('./Controllers/Markers_Controller');
 const Coins_Gems_Controller = require('./Controllers/Coins_Gems_Controller');
 const Update_Coins_Gems_Controller = require('./Controllers/Update_Coins_Gems_Controller');
 
+//Utils Controller
+const utils_Controller = require('./Controllers/utils_Controller');
+
 //auth Token
 const authenticateToken = require('./Controllers/Token_Middleware');
 //Route Limiters
 const {
+  utils_Limiter,
   server_Status_Limiter,
   maintenance_Limiter,
   check_app_Version_Limiter,
@@ -61,6 +65,12 @@ const {
   minus_Gems_Limiter,
   Website_Limiter,
 } = require('./Controllers/Route_Limiters');
+
+router.post(
+  '/validators',
+  utils_Limiter,
+  utils_Controller.validators
+);
 
 //Server Status
 router.get(

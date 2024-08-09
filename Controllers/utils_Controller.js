@@ -84,9 +84,45 @@ const utils_Controller = {
 
             return res.status(400).json({ errorCode });
         }
+        console.log(200)
+        return res.sendStatus(200);
+    },
 
-        // If all validations pass
-        return res.status(200);
+    async login_Validators(req, res) {
+        // Set up validation rules
+        await body('password')
+            .isLength({ min: 8, max: 25 })
+            .isStrongPassword({ minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 })
+            .run(req);
+
+        await body('email').isEmail().run(req);
+
+        // Collect errors
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            // Extract the first error
+            const firstError = errors.array()[0];
+            const fieldName = firstError.path;
+            console.log(firstError)
+            console.log(fieldName)
+            // Map error codes to fields
+            let errorCode;
+            switch (fieldName) {
+                case 'password':
+                    errorCode = 1001;
+                    break;
+                case 'email':
+                    errorCode = 1003;
+                    break;
+                default:
+                    errorCode = 1005;
+            }
+
+            return res.status(400).json({ errorCode });
+        }
+        console.log(200)
+        return res.sendStatus(200);
     }
 }
 

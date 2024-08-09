@@ -1,8 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 const express = require('express');
-//Validators
-const { usernameValidator, passwordValidator, emailValidator, carInfoValidator } = require('./validators');
 //Routes
 const router = express.Router();
 //Models
@@ -14,9 +12,6 @@ const { body, validationResult } = require('express-validator');
 //Shared digit code variables
 const sharedVariables = require('./sharedVariables');
 const { max } = require('moment');
-//Extra validators files
-// const { containsBadWords } = require('./BadWords');
-// const { containsCarNames } = require('./CarWords');
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -124,9 +119,7 @@ const Register_Controller = {
 
   async register_Data(req, res) {
     const { username, password, email, digitCode, carInfo } = req.body;
-    // Apply Validators
     try {
-
     //Start the registration proccess
     if (digitCode == verificationCode) {
       const coins = 25;

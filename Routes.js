@@ -72,6 +72,12 @@ router.post(
   utils_Controller.validators
 );
 
+router.post(
+  '/login_Validators',
+  utils_Limiter,
+  utils_Controller.login_Validators
+);
+
 //Server Status
 router.get(
   '/server_Status',

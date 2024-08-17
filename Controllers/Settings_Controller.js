@@ -9,41 +9,19 @@ const bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator');
 //Shared digit code variables
 const sharedVariables = require('./sharedVariables');
+//Validators
+const utils_Controller = require('./utils_Controller');
 
 const saltRounds = 10;
 
 const Settings_Controller = {
   async change_Username(req, res) {
+    //Validators
+    await utils_Controller.username_Validator(req, res);
+    if (res.headersSent) return;
+
     const { newUsername } = req.body;
     try {
-      //Username
-      const validateUsername = [
-        body('newUsername')
-          .isLength({ min: 2, max: 25 })
-          .custom(value => {
-            const unicodeLetterStart = /^\p{L}/u; // Unicode letter at the start
-            if (!unicodeLetterStart.test(value)) {
-              throw new Error('Username must start with a letter');
-            }
-            return true;
-          })
-          .custom(value => {
-            const allowedCharacters = /^[\p{L}\p{N}_-]+$/u; // Unicode letters, numbers, - and _
-            if (!allowedCharacters.test(value)) {
-              throw new Error('Username must contain only letters, numbers, - and _');
-            }
-            return true;
-          })
-      ];
-      await Promise.all(
-        validateUsername.map((validation) => validation.run(req))
-      );
-      const usernameErrors = validationResult(req);
-      if (!usernameErrors.isEmpty()) {
-        return res.sendStatus(400);
-      }
-
-      if (newUsername !== undefined && req.user.id !== undefined) {
         const results = await Settings_Model.change_Username(
           newUsername,
           req.user.id
@@ -53,13 +31,17 @@ const Settings_Controller = {
         } else {
           return res.sendStatus(400);
         }
-      }
+      
     } catch (error) {
       res.sendStatus(400);
     }
   },
 
   async check_Old_Password(req, res) {
+    //Validators
+    await utils_Controller.password_Validator(req, res);
+    if (res.headersSent) return;
+
     const { oldPassword } = req.body;
     try {
       const results = await Settings_Model.check_Old_Password(req.user.id);
@@ -80,33 +62,14 @@ const Settings_Controller = {
   },
 
   async change_Password(req, res) {
+    //Validators
+    await utils_Controller.password_Validator(req, res);
+    if (res.headersSent) return;
+
     const { newPassword } = req.body;
 
     try {
-      const validatePassword = [
-        body('newPassword')
-          .isLength({ min: 8, max: 25 })
-          .isStrongPassword({
-            minLowercase:1,
-            minUppercase:1,
-            minNumbers:1,
-            minSymbols:0
-          })
-      ];
-      await Promise.all(
-        validatePassword.map((validation) => validation.run(req))
-      );
-      const errorsPassword = validationResult(req);
-
-      if (!errorsPassword.isEmpty()) {
-        return res.sendStatus(400);
-      }
-
-      if (
-        newPassword !== undefined &&
-        req.user.id !== undefined &&
-        newPassword.length >= 8
-      ) {
+    
         const hash = await new Promise((resolve, reject) => {
           bcrypt.hash(newPassword, saltRounds, (err, hash) => {
             if (err) {
@@ -123,44 +86,20 @@ const Settings_Controller = {
         } else {
           res.sendStatus(400);
         }
-      } else {
-        res.sendStatus(400);
-      }
+      
     } catch (error) {
       res.sendStatus(400);
     }
   },
 
   async change_CarInfo(req, res) {
+    //Validators
+    await utils_Controller.carInfo_Validator(req, res);
+    if (res.headersSent) return;
+
     const { newCarInfo } = req.body;
     try {
-      const changeCarInfoValidation = [
-        body('newCarInfo')
-          .isLength({ min: 2, max: 25 })
-          .custom(value => {
-            const unicodeLetterStart = /^\p{L}/u; // Unicode letter at the start
-            if (!unicodeLetterStart.test(value)) {
-              throw new Error('Username must start with a letter');
-            }
-            return true;
-          })
-          .custom(value => {
-            const allowedCharacters = /^[\p{L}\p{N}_-]+$/u; // Unicode letters, numbers, - and _
-            if (!allowedCharacters.test(value)) {
-              throw new Error('Username must contain only letters, numbers, - and _');
-            }
-            return true;
-          })
-      ];
-      await Promise.all(
-        changeCarInfoValidation.map((validation) => validation.run(req))
-      );
-      const carErrors = validationResult(req);
-      if (!carErrors.isEmpty()) {
-        return res.sendStatus(400);
-      }
-
-      if (newCarInfo !== undefined && req.user.id !== undefined) {
+     
         const results = await Settings_Model.change_CarInfo(
           newCarInfo,
           req.user.id
@@ -170,9 +109,7 @@ const Settings_Controller = {
         } else {
           return res.sendStatus(400);
         }
-      } else {
-        return res.sendStatus(400);
-      }
+     
     } catch (error) {
       res.sendStatus(400);
     }
@@ -180,16 +117,14 @@ const Settings_Controller = {
 
   async delete_User(req, res) {
     try {
-      if (req.user.id !== undefined) {
+    
         const results = await Settings_Model.delete_User(req.user.id);
         if (results) {
           return res.sendStatus(200);
         } else {
           return res.sendStatus(400);
         }
-      } else {
-        return res.sendStatus(400);
-      }
+     
     } catch (error) {
       res.sendStatus(400);
     }

@@ -14,6 +14,8 @@ const jwt = require('jsonwebtoken');
 //Controllers
 const Register_Controller = require('./Register_Controller');
 const { createDbConnection } = require('../Models/common');
+//Validators
+const utils_Controller = require('./utils_Controller');
 
 //Keys
 //For Apple Auth
@@ -31,25 +33,14 @@ const { createDbConnection } = require('../Models/common');
 
 const logIn_Controller = {
   async login(req, res) {
+    //Validators
+    await utils_Controller.email_Validator(req, res);
+    if (res.headersSent) return;
+    await utils_Controller.password_Validator(req, res);
+    if (res.headersSent) return;
+
     const { email, password } = req.body;
     try {
-      //Email
-      await body('email').isEmail().withMessage('Invalid email format').run(req);
-      const errorsEmail = validationResult(req);
-      if (!errorsEmail.isEmpty()) {
-        return res.status(400).json({ errors: errorsEmail.array() });
-      }
-      //Password
-      await body('password')
-      .isLength({ min: 8, max: 25 }).withMessage('Password must be between 8 and 25 characters')
-      .isStrongPassword({ minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 })
-      .withMessage('Password must contain at least 1 lowercase letter, 1 uppercase letter, and 1 number')
-      .run(req);
-      const errorsPassword = validationResult(req);
-      if (!errorsPassword.isEmpty()) {
-        return res.status(400).json({ errors: errorsPassword.array() });
-      }
-      // Fetch user and compare password
       const results = await LogIn_Model.login_Model(email);
       if (results.length === 0) {
         res.sendStatus(401);
@@ -158,16 +149,13 @@ const logIn_Controller = {
   },
 
   async google_Login(req, res) {
+    
+    //Validators
+    await utils_Controller.email_Validator(req, res);
+    if (res.headersSent) return;
+
     const { email } = req.body;
     try {
-      //Email
-      const validateEmail = [body('email').isEmail()];
-      await Promise.all(validateEmail.map((validation) => validation.run(req)));
-      const errorsEmail = validationResult(req);
-      if (!errorsEmail.isEmpty()) {
-        return res.sendStatus(400);
-      }
-
       const results = await LogIn_Model.login_Model(email);
       if (results.length === 0) {
         res.sendStatus(401);

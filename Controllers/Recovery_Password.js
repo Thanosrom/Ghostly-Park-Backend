@@ -4,7 +4,7 @@ const express = require('express');
 //Routes
 const router = express.Router();
 //Models
-const Register_Model = require('../Models/Register_Model');
+const Recovery_Model = require('../Models/Recovery_Model');
 //Libs
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
@@ -44,7 +44,7 @@ const Recovery_Password_Controller = {
     const { email, locale } = req.body;
 
     try {
-      const [results] = await Register_Model.check_If_Email_Exist_Model(email);
+      const [results] = await Recovery_Model.check_If_Email_Exist_Model(email);
       if (results && results.length > 0) {
         return res.sendStatus(400);
       }
@@ -132,7 +132,7 @@ const Recovery_Password_Controller = {
     if (res.headersSent) return;
 
     const { password, repeatPassword, email } = req.body;
-
+    console.log(password,repeatPassword,email)
     try {
       bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) {
@@ -145,9 +145,9 @@ const Recovery_Password_Controller = {
           }
           const results = await Recovery_Model.change_Password(
             hash,
-            hashRepeat,
             email
           );
+          console.log(results)
           if (results) {
             return res.sendStatus(200);
           } else {

@@ -49,7 +49,6 @@ const utils_Controller = {
             .isLength({ min: 8, max: 25 })
             .isStrongPassword({ minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 })
             .run(req);
-            console.log('Entered')
         // Collect errors
         const errors = validationResult(req);
 
@@ -127,7 +126,6 @@ const utils_Controller = {
                 default:
                     errorCode = 1005;
             }
-
             return false;
         }
         return true;

@@ -1,7 +1,23 @@
 /* eslint-disable no-unused-vars */
 const { createDbConnection } = require('./common');
 
-async function change_Password(password, repeatPassword, email) {
+
+async function check_If_Email_Exist_Model(email) {
+  const dbConnection = await createDbConnection();
+  try {
+    const [results] = await dbConnection.execute(
+      'SELECT * from register where email = ?',
+      [email]
+    );
+    return results;
+  } catch (error) {
+    return false;
+  } finally {
+    dbConnection.close();
+  }
+}
+
+async function change_Password(password, email) {
   const dbConnection = await createDbConnection();
 
   try {
@@ -12,9 +28,10 @@ async function change_Password(password, repeatPassword, email) {
     if (results_id.length > 0) {
       const userId = results_id[0].id;
       const [results] = await dbConnection.execute(
-        'UPDATE register SET password = ?, repeatPassword = ? WHERE id = ?',
-        [password, repeatPassword, userId]
+        'UPDATE register SET password = ? WHERE id = ?',
+        [password, userId]
       );
+      console.log(results)
       return results.affectedRows === 1;
     } else {
       return false;
@@ -27,5 +44,6 @@ async function change_Password(password, repeatPassword, email) {
 }
 
 module.exports = {
+  check_If_Email_Exist_Model,
   change_Password,
 };

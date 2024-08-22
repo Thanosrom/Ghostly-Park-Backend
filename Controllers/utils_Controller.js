@@ -26,8 +26,6 @@ const utils_Controller = {
             // Extract the first error
             const firstError = errors.array()[0];
             const fieldName = firstError.path;
-            console.log(firstError)
-            console.log(fieldName)
             // Map error codes to fields
             let errorCode;
             switch (fieldName) {
@@ -56,8 +54,6 @@ const utils_Controller = {
             // Extract the first error
             const firstError = errors.array()[0];
             const fieldName = firstError.path;
-            console.log(firstError)
-            console.log(fieldName)
             // Map error codes to fields
             let errorCode;
             switch (fieldName) {
@@ -87,8 +83,6 @@ const utils_Controller = {
             // Extract the first error
             const firstError = errors.array()[0];
             const fieldName = firstError.path;
-            console.log(firstError)
-            console.log(fieldName)
             // Map error codes to fields
             let errorCode;
             switch (fieldName) {
@@ -115,8 +109,6 @@ const utils_Controller = {
             // Extract the first error
             const firstError = errors.array()[0];
             const fieldName = firstError.path;
-            console.log(firstError)
-            console.log(fieldName)
             // Map error codes to fields
             let errorCode;
             switch (fieldName) {
@@ -157,8 +149,6 @@ const utils_Controller = {
             // Extract the first error
             const firstError = errors.array()[0];
             const fieldName = firstError.path;
-            console.log(firstError)
-            console.log(fieldName)
             // Map error codes to fields
             let errorCode;
             switch (fieldName) {

@@ -170,20 +170,19 @@ const Register_Controller = {
   },
 
   //Google Register
-  async register_Google_Data(username, password, email, carInfo, sub) {
+  async register_Google_Data(req, res,username, password, email, carInfo, sub) {
     //Registers
     try {
       //Validators
       await utils_Controller.username_Validator(req, res);
       if (res.headersSent) return;
-      await utils_Controller.password_Validator(req, res);
-      if (res.headersSent) return;
+      // await utils_Controller.password_Validator(req, res);
+      // if (res.headersSent) return;
       await utils_Controller.email_Validator(req, res);
       if (res.headersSent) return;
-      await utils_Controller.carInfo_Validator(req, res);
-      if (res.headersSent) return;
+      // await utils_Controller.carInfo_Validator(req, res);
+      // if (res.headersSent) return;
 
-      console.log(sub);
       const coins = 25;
       const gems = 25;
       const subscription = 0;

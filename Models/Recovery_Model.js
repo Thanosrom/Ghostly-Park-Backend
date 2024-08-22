@@ -31,7 +31,6 @@ async function change_Password(password, email) {
         'UPDATE register SET password = ? WHERE id = ?',
         [password, userId]
       );
-      console.log(results)
       return results.affectedRows === 1;
     } else {
       return false;

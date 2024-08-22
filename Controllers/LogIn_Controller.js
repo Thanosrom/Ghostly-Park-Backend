@@ -97,14 +97,13 @@ const logIn_Controller = {
       const given_name = payload.given_name;
       const email = payload.email;
       const sub = payload.sub;
-
+  
       if (payload.email_verified == true) {
         // Check if user already exists in register table
         const [results] = await dbConnection.execute(
           `SELECT * FROM register WHERE google_id = ?`,
           [sub]
         );
-        console.log(results);
         if (!results) {
           console.error('Error querying database:', err);
           res.status(500).send('Error signing in');
@@ -114,7 +113,6 @@ const logIn_Controller = {
         if (results.length > 0) {
           // User exists, update their Google-related information
           const updateQueryString = `UPDATE register SET google_id = ?, email = ?, username = ? WHERE google_id = ?`;
-          console.log(updateQueryString);
           dbConnection.query(
             updateQueryString,
             [sub, email, given_name, sub],
@@ -130,16 +128,16 @@ const logIn_Controller = {
         } else {
           //Register the User
           const results = await Register_Controller.register_Google_Data(
+            req,
+            res,
             given_name,
             '',
             email,
             '',
             sub
           );
-          console.log(results);
         }
       } else {
-        console.log('Email is not Verified');
       }
       res.status(200).json(payload);
     } catch (error) {

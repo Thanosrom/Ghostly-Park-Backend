@@ -132,7 +132,6 @@ const Recovery_Password_Controller = {
     if (res.headersSent) return;
 
     const { password, repeatPassword, email } = req.body;
-    console.log(password,repeatPassword,email)
     try {
       bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) {
@@ -147,7 +146,6 @@ const Recovery_Password_Controller = {
             hash,
             email
           );
-          console.log(results)
           if (results) {
             return res.sendStatus(200);
           } else {

@@ -106,7 +106,7 @@ const logIn_Controller = {
         );
         if (!results) {
           console.error('Error querying database:', err);
-          res.status(500).send('Error signing in');
+          res.status(400).send('Error signing in');
           return;
         }
 
@@ -119,7 +119,7 @@ const logIn_Controller = {
             (updateErr) => {
               if (updateErr) {
                 console.error('Error updating user:', updateErr);
-                res.status(500).send('Error signing in');
+                res.status(400).send('Error signing in');
               } else {
                 res.status(200).send('User signed in successfully');
               }
@@ -142,7 +142,7 @@ const logIn_Controller = {
       res.status(200).json(payload);
     } catch (error) {
       console.log(error);
-      res.status(401).json({ error: 'Invalid token' });
+      res.status(400).json({ error: 'Invalid token' });
     }
   },
 
@@ -156,7 +156,7 @@ const logIn_Controller = {
     try {
       const results = await LogIn_Model.login_Model(email);
       if (results.length === 0) {
-        res.sendStatus(401);
+        res.sendStatus(400);
       } else {
         const payload = { id: results[0].id };
         const token = jwt.sign(payload, process.env.SECRET_KEY, {

@@ -1,13 +1,34 @@
 /* eslint-disable no-unused-vars */
 const { createDbConnection } = require('./common');
 
-async function plus_Coins(id) {
+async function plus_Subscription(id) {
+
+  const dbConnection = await createDbConnection();
+  try {
+
+    const updatedSubscription = 1;
+    
+    const [results] = await dbConnection.execute(
+      'UPDATE register SET subscription = ? WHERE id = ?',
+      [updatedSubscription, parseInt(id)]
+    );
+    return results.affectedRows === 1;
+  
+  } catch (error) {
+    return false;
+  } finally {
+    dbConnection.close();
+  }
+}
+
+async function plus_Coins(id,type) {
   const dbConnection = await createDbConnection();
   try {
     const [currentResults] = await dbConnection.execute(
       'SELECT coins FROM register WHERE id = ?',
       [parseInt(id)]
     );
+    if(type == 'ads'){
     const currentCoins = currentResults[0].coins;
     const updatedCoins = currentCoins + 1;
     const [results] = await dbConnection.execute(
@@ -15,6 +36,24 @@ async function plus_Coins(id) {
       [updatedCoins, parseInt(id)]
     );
     return results.affectedRows === 1;
+    }else if (type == 'reward'){
+      const currentCoins = currentResults[0].coins;
+      const updatedCoins = currentCoins + 1;
+      const [results] = await dbConnection.execute(
+        'UPDATE register SET coins = ? WHERE id = ?',
+        [updatedCoins, parseInt(id)]
+      );
+      return results.affectedRows === 1;
+    }else if (type == 'buy'){
+      const currentCoins = currentResults[0].coins;
+      const updatedCoins = currentCoins + 30;
+      const [results] = await dbConnection.execute(
+        'UPDATE register SET coins = ? WHERE id = ?',
+        [updatedCoins, parseInt(id)]
+      );
+      return results.affectedRows === 1;
+      }
+
   } catch (error) {
     return false;
   } finally {
@@ -79,7 +118,7 @@ async function plus_Gems(id) {
       [parseInt(id)]
     );
     const currentGems = currentResults[0].gems;
-    const updatedGems = currentGems + 1;
+    const updatedGems = currentGems + 30;
     const [results] = await dbConnection.execute(
       'UPDATE register SET gems = ? WHERE id = ?',
       [updatedGems, parseInt(id)]
@@ -119,6 +158,7 @@ async function minus_Gems(id) {
 }
 
 module.exports = {
+  plus_Subscription,
   plus_Coins,
   minus_Coins,
   minus_5_Coins,

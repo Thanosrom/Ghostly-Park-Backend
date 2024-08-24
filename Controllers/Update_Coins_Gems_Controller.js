@@ -8,9 +8,27 @@ const Update_Coins_Gems_Model = require('../Models/Update_Coins_Gems_Model');
 const verifyToken = require('./Token_Middleware');
 
 const Update_Coins_Gems_Controller = {
-  async plus_Coins(req, res) {
+  
+  async plus_Subscription(req, res) {
+
     try {
-      const results = await Update_Coins_Gems_Model.plus_Coins(req.user.id);
+      const results = await Update_Coins_Gems_Model.plus_Subscription(req.user.id);
+      if (results == true) {
+        res.status(200).json(results);
+      } else {
+        res.sendStatus(400);
+      }
+    } catch (error) {
+      res.sendStatus(400);
+    }
+  },
+
+  async plus_Coins(req, res) {
+
+    const { type } = req.body;
+
+    try {
+      const results = await Update_Coins_Gems_Model.plus_Coins(req.user.id,type);
       if (results == true) {
         res.status(200).json(results);
       } else {
@@ -48,6 +66,7 @@ const Update_Coins_Gems_Controller = {
   },
 
   async plus_Gems(req, res) {
+
     try {
       const results = await Update_Coins_Gems_Model.plus_Gems(req.user.id);
       if (results == true) {

@@ -34,8 +34,6 @@ const {
   server_Status_Limiter,
   maintenance_Limiter,
   check_app_Version_Limiter,
-  privacy_Policy_And_Terms_Limiter,
-  delete_Account_Steps_Limiter,
   login_Limiter,
   auth_google_Limiter,
   google_Login_Limiter,
@@ -58,12 +56,16 @@ const {
   get_Subscription_Limiter,
   get_Coins_Limiter,
   get_Gems_Limiter,
+  plus_Subscription_Limiter,
   plus_Coins_Limiter,
   plus_Gems_Limiter,
   minus_Coins_Limiter,
   minus_5_Coins_Limiter,
   minus_Gems_Limiter,
   Website_Limiter,
+  privacy_Policy_And_Terms_Limiter,
+  delete_Account_Steps_Limiter,
+  app_ads_Limiter
 } = require('./Controllers/Route_Limiters');
 
 //Server Status
@@ -205,6 +207,12 @@ router.get(
   Coins_Gems_Controller.get_Gems
 );
 router.put(
+  '/plus_Subscription',
+  authenticateToken,
+  plus_Subscription_Limiter,
+  Update_Coins_Gems_Controller.plus_Subscription
+);
+router.put(
   '/plus_Coins',
   authenticateToken,
   plus_Coins_Limiter,
@@ -253,7 +261,7 @@ router.get(
 );
 router.get(
   '/app-ads.txt',
-  privacy_Policy_And_Terms_Limiter,
+  app_ads_Limiter,
   app_ads_Controller.app_ads
 );
 

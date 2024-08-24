@@ -112,10 +112,10 @@ const logIn_Controller = {
 
         if (results.length > 0) {
           // User exists, update their Google-related information
-          const updateQueryString = `UPDATE register SET google_id = ?, email = ?, username = ? WHERE google_id = ?`;
+          const updateQueryString = `UPDATE register SET google_id = ?, email = ? WHERE google_id = ?`;
           dbConnection.query(
             updateQueryString,
-            [sub, email, given_name, sub],
+            [sub, email, sub],
             (updateErr) => {
               if (updateErr) {
                 console.error('Error updating user:', updateErr);

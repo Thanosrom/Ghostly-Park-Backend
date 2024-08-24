@@ -11,8 +11,6 @@ const rateLimit = require('express-rate-limit');
 const Server_Status_Controller = require('./Controllers/Server_Status_Controller');
 const Maintenance_Controller = require('./Controllers/Maintenance_Controller');
 const Check_App_Version_Controller = require('./Controllers/Check_App_Version_Controller');
-const Privacy_Policy_And_Terms_Controller = require('./Controllers/Privacy_Policy_And_Terms_Controller');
-const Delete_Account_Steps_Controller = require('./Controllers/Delete_Account_Steps_Controller');
 
 //App Controllers
 const LogIn_Controller = require('./Controllers/LogIn_Controller');
@@ -25,9 +23,14 @@ const Update_Coins_Gems_Controller = require('./Controllers/Update_Coins_Gems_Co
 
 //auth Token
 const authenticateToken = require('./Controllers/Token_Middleware');
+
+//Extras
+const Privacy_Policy_And_Terms_Controller = require('./Controllers/Privacy_Policy_And_Terms_Controller');
+const Delete_Account_Steps_Controller = require('./Controllers/Delete_Account_Steps_Controller');
+const app_ads_Controller = require('./Controllers/app_ads_Controller');
+
 //Route Limiters
 const {
-  utils_Limiter,
   server_Status_Limiter,
   maintenance_Limiter,
   check_app_Version_Limiter,
@@ -78,16 +81,6 @@ router.get(
   '/check_app_Version',
   check_app_Version_Limiter,
   Check_App_Version_Controller.check_App_Version
-);
-router.get(
-  '/privacy_Policy_And_Terms',
-  privacy_Policy_And_Terms_Limiter,
-  Privacy_Policy_And_Terms_Controller.privacy_Policy_And_Terms
-);
-router.get(
-  '/delete_Account_Steps',
-  delete_Account_Steps_Limiter,
-  Delete_Account_Steps_Controller.delete_Account_Steps
 );
 
 //Login
@@ -246,6 +239,23 @@ router.put(
 router.get('/', Website_Limiter, (req, res) => {
   res.sendFile(__dirname + '/Website/dist/index.html');
 });
+
+//Extras
+router.get(
+  '/privacy_Policy_And_Terms',
+  privacy_Policy_And_Terms_Limiter,
+  Privacy_Policy_And_Terms_Controller.privacy_Policy_And_Terms
+);
+router.get(
+  '/delete_Account_Steps',
+  delete_Account_Steps_Limiter,
+  Delete_Account_Steps_Controller.delete_Account_Steps
+);
+router.get(
+  '/app-ads.txt',
+  privacy_Policy_And_Terms_Limiter,
+  app_ads_Controller.app_ads
+);
 
 //Export
 module.exports = router;

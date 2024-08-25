@@ -23,6 +23,20 @@ const Update_Coins_Gems_Controller = {
     }
   },
 
+  async minus_Subscription(req, res) {
+
+    try {
+      const results = await Update_Coins_Gems_Model.minus_Subscription();
+      if (results == true) {
+        console.log("Some Subscriptions turned off")
+      } else {
+        console.log("There where no Subscriptions to turn off")
+      }
+    } catch (error) {
+     
+    }
+  },
+
   async plus_Coins(req, res) {
 
     const { type } = req.body;

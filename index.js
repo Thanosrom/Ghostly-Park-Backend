@@ -8,6 +8,8 @@ const fs = require('fs');
 const app = express();
 //Controllers to delete the Markers
 const Markers_Controller = require('./Controllers/Markers_Controller');
+//Subscription
+const Update_Coins_Gems_Controller = require('./Controllers/Update_Coins_Gems_Controller');
 //Routes
 const Routes = require('./Routes');
 //SSL Options
@@ -28,6 +30,8 @@ app.use(express.static(__dirname + '/Website/dist'));
 
 //Delete The Markers after some minutes-hours
 setInterval(Markers_Controller.delete_Markers, 4 * 60 * 60 * 1000);
+//Terminate the Subscriptions
+setInterval(Update_Coins_Gems_Controller.minus_Subscription, 1 * 60 * 60 * 1000);
 
 //Server Port
 server.listen(443, () => {

@@ -7,15 +7,32 @@ async function plus_Subscription(id) {
   try {
 
     const updatedSubscription = 1;
-    
+    const timestamp = new Date();
     const [results] = await dbConnection.execute(
-      'UPDATE register SET subscription = ? WHERE id = ?',
-      [updatedSubscription, parseInt(id)]
+      'UPDATE register SET subscription = ?,subscription_timestamp = ? WHERE id = ?',
+      [updatedSubscription, timestamp, parseInt(id)]
     );
     return results.affectedRows === 1;
   
   } catch (error) {
     return false;
+  } finally {
+    dbConnection.close();
+  }
+}
+
+async function minus_Subscription() {
+
+  const dbConnection = await createDbConnection();
+  try {
+    const [results] = await dbConnection.execute(
+      'UPDATE register SET subscription = ? WHERE subscription = ? AND subscription_timestamp < NOW() - INTERVAL 30 DAY',
+      [0, 1]
+    );
+    console.log(results)
+    return results.affectedRows > 0;
+  } catch (error) {
+    console.error('Error updating subscription:', error);  // Log the error for debugging
   } finally {
     dbConnection.close();
   }
@@ -30,7 +47,7 @@ async function plus_Coins(id,type) {
     );
     if(type == 'ads'){
     const currentCoins = currentResults[0].coins;
-    const updatedCoins = currentCoins + 1;
+    const updatedCoins = currentCoins + 3;
     const [results] = await dbConnection.execute(
       'UPDATE register SET coins = ? WHERE id = ?',
       [updatedCoins, parseInt(id)]
@@ -38,7 +55,7 @@ async function plus_Coins(id,type) {
     return results.affectedRows === 1;
     }else if (type == 'reward'){
       const currentCoins = currentResults[0].coins;
-      const updatedCoins = currentCoins + 1;
+      const updatedCoins = currentCoins + 3;
       const [results] = await dbConnection.execute(
         'UPDATE register SET coins = ? WHERE id = ?',
         [updatedCoins, parseInt(id)]
@@ -159,6 +176,7 @@ async function minus_Gems(id) {
 
 module.exports = {
   plus_Subscription,
+  minus_Subscription,
   plus_Coins,
   minus_Coins,
   minus_5_Coins,

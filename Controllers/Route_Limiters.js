@@ -246,14 +246,6 @@ const minus_Coins_Limiter = rateLimit({
   headers: true,
 });
 
-const minus_5_Coins_Limiter = rateLimit({
-  WindowMs: 10 * 1000,
-  max: 10,
-  message:
-    'Too many login attempts from this IP, please try again after some minutes',
-  headers: true,
-});
-
 const minus_Gems_Limiter = rateLimit({
   WindowMs: 10 * 1000,
   max: 10,
@@ -332,7 +324,6 @@ module.exports = {
   plus_Subscription_Limiter,
   plus_Coins_Limiter,
   minus_Coins_Limiter,
-  minus_5_Coins_Limiter,
   plus_Gems_Limiter,
   minus_Gems_Limiter,
   Website_Limiter,

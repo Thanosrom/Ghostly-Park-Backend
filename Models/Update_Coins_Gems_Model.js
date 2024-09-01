@@ -78,7 +78,7 @@ async function plus_Coins(id,type) {
   }
 }
 
-async function minus_Coins(id) {
+async function minus_Coins(id,type) {
   const dbConnection = await createDbConnection();
 
   try {
@@ -87,6 +87,7 @@ async function minus_Coins(id) {
       [parseInt(id)]
     );
     const currentCoins = currentResults[0].coins;
+    if(type == 'simple'){
     if (currentCoins > 0) {
       const updatedCoins = currentCoins - 1;
       const [results] = await dbConnection.execute(
@@ -94,31 +95,15 @@ async function minus_Coins(id) {
         [updatedCoins, parseInt(id)]
       );
       return results.affectedRows === 1;
-    } else {
-      return false;
     }
-  } catch (error) {
-    return false;
-  } finally {
-    dbConnection.close();
-  }
-}
-
-async function minus_5_Coins(id) {
-  const dbConnection = await createDbConnection();
-
-  try {
-    const [currentResults] = await dbConnection.execute(
-      'SELECT coins FROM register WHERE id = ?',
-      [parseInt(id)]
-    );
-    const currentCoins = currentResults[0].coins;
-    const updatedCoins = currentCoins - 5;
-    const [results] = await dbConnection.execute(
-      'UPDATE register SET coins = ? WHERE id = ?',
-      [updatedCoins, parseInt(id)]
-    );
-    return results.affectedRows === 1;
+    }else if(type == 'police'){
+      const updatedCoins = currentCoins - 10;
+      const [results] = await dbConnection.execute(
+        'UPDATE register SET coins = ? WHERE id = ?',
+        [updatedCoins, parseInt(id)]
+      );
+      return results.affectedRows === 1;
+    }
   } catch (error) {
     return false;
   } finally {
@@ -179,7 +164,6 @@ module.exports = {
   minus_Subscription,
   plus_Coins,
   minus_Coins,
-  minus_5_Coins,
   plus_Gems,
   minus_Gems,
 };

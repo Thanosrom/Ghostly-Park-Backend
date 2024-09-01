@@ -4,7 +4,7 @@ const express = require('express');
 const check_App_Version_Controller = {
   async check_App_Version(req, res) {
     try {
-      res.status(200).json('1.0.0+13');
+      res.status(200).json('1.0.0+14');
     } catch (error) {
       res
         .status(400)

@@ -60,7 +60,6 @@ const {
   plus_Coins_Limiter,
   plus_Gems_Limiter,
   minus_Coins_Limiter,
-  minus_5_Coins_Limiter,
   minus_Gems_Limiter,
   Website_Limiter,
   privacy_Policy_And_Terms_Limiter,
@@ -229,12 +228,6 @@ router.put(
   authenticateToken,
   minus_Coins_Limiter,
   Update_Coins_Gems_Controller.minus_Coins
-);
-router.put(
-  '/minus_5_Coins',
-  authenticateToken,
-  minus_5_Coins_Limiter,
-  Update_Coins_Gems_Controller.minus_5_Coins
 );
 router.put(
   '/minus_Gems',

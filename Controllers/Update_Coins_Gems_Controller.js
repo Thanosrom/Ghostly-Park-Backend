@@ -54,21 +54,11 @@ const Update_Coins_Gems_Controller = {
   },
 
   async minus_Coins(req, res) {
-    try {
-      const results = await Update_Coins_Gems_Model.minus_Coins(req.user.id);
-      if (results == true) {
-        res.status(200).json(results);
-      } else {
-        res.sendStatus(400);
-      }
-    } catch (error) {
-      res.sendStatus(400);
-    }
-  },
 
-  async minus_5_Coins(req, res) {
+    const { type } = req.body;
+    
     try {
-      const results = await Update_Coins_Gems_Model.minus_5_Coins(req.user.id);
+      const results = await Update_Coins_Gems_Model.minus_Coins(req.user.id,type);
       if (results == true) {
         res.status(200).json(results);
       } else {

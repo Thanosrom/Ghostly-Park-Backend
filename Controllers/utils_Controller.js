@@ -20,8 +20,10 @@ const utils_Controller = {
             //     //return true;
             // })
             .run(req);
-
+        console.log("Entered");
         const errors = validationResult(req);
+        console.log(errors);
+
         if (!errors.isEmpty()) {
             // Extract the first error
             const firstError = errors.array()[0];
@@ -45,7 +47,7 @@ const utils_Controller = {
         // Set up validation rules
         await body('password')
             .isLength({ min: 8, max: 25 })
-            .isStrongPassword({ minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 })
+            .isStrongPassword({ minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })
             .run(req);
         // Collect errors
         const errors = validationResult(req);
@@ -73,7 +75,7 @@ const utils_Controller = {
         // Set up validation rules
         await body('repeatPassword')
             .isLength({ min: 8, max: 25 })
-            .isStrongPassword({ minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 })
+            .isStrongPassword({ minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })
             .run(req);
 
         // Collect errors

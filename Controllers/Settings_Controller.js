@@ -17,10 +17,10 @@ const saltRounds = 10;
 const Settings_Controller = {
   async change_Username(req, res) {
     //Validators
-    await utils_Controller.username_Validator(req, res);
-    if (res.headersSent) return;
 
     const { newUsername } = req.body;
+    await utils_Controller.username_Validator(req.body, res);
+    if (res.headersSent) return;
     try {
         const results = await Settings_Model.change_Username(
           newUsername,

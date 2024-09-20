@@ -5,7 +5,7 @@ async function plus_Subscription(id) {
 
   const dbConnection = await createDbConnection();
   try {
-
+    console.log(id)
     const updatedSubscription = 1;
     const timestamp = new Date();
     const [results] = await dbConnection.execute(

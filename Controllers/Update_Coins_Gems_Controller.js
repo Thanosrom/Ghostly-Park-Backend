@@ -12,6 +12,7 @@ const Update_Coins_Gems_Controller = {
   async plus_Subscription(req, res) {
 
     try {
+      console.log(req.user.id)
       const results = await Update_Coins_Gems_Model.plus_Subscription(req.user.id);
       if (results == true) {
         res.status(200).json(results);

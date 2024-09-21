@@ -36,6 +36,7 @@ const logIn_Controller = {
     //Validators
     await utils_Controller.email_Validator(req, res);
     if (res.headersSent) return;
+    
     await utils_Controller.password_Validator(req, res);
     if (res.headersSent) return;
 
@@ -68,7 +69,6 @@ const logIn_Controller = {
         }
       }
     } catch (error) {
-      console.log(error);
     }
   },
 
@@ -83,7 +83,6 @@ const logIn_Controller = {
       const payload = ticket.getPayload();
       return payload;
     } catch (error) {
-      console.log(error);
     }
   },
 
@@ -141,7 +140,6 @@ const logIn_Controller = {
       }
       res.status(200).json(payload);
     } catch (error) {
-      console.log(error);
       res.status(400).json({ error: 'Invalid token' });
     }
   },
@@ -175,7 +173,6 @@ const logIn_Controller = {
         res.status(200).json(response);
       }
     } catch (error) {
-      console.log(error);
     }
   },
 

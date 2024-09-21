@@ -92,7 +92,6 @@ const Register_Controller = {
 
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-          console.log(error);
           return res.sendStatus(400);
         } else {
           return res.sendStatus(200);
@@ -176,12 +175,12 @@ const Register_Controller = {
       //Validators
       await utils_Controller.username_Validator(req, res);
       if (res.headersSent) return;
-      // await utils_Controller.password_Validator(req, res);
-      // if (res.headersSent) return;
+      await utils_Controller.password_Validator(req, res);
+      if (res.headersSent) return;
       await utils_Controller.email_Validator(req, res);
       if (res.headersSent) return;
-      // await utils_Controller.carInfo_Validator(req, res);
-      // if (res.headersSent) return;
+      await utils_Controller.carInfo_Validator(req, res);
+      if (res.headersSent) return;
 
       const coins = 25;
       const gems = 25;
@@ -207,7 +206,6 @@ const Register_Controller = {
         }
       });
     } catch (error) {
-      console.log(error);
       return false;
     }
   },
